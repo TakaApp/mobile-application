@@ -7,20 +7,33 @@ import {
   Text,
   TouchableOpacity,
   View,
+
+  TextInput,
+  FlatList,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
+
+import SearchLocation from '../components/SearchLocation';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
+  state = {
+    fromInput: '',
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+
+          <View>
+            <SearchLocation />
+          </View>
           <View style={styles.welcomeContainer}>
             <Image
               source={

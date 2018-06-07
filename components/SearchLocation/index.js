@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import T from 'prop-types';
 
 import {
   StyleSheet,
@@ -9,35 +10,58 @@ import {
   TextInput,
 } from 'react-native';
 
+// SearchLocation is a component connected to Taka API
+// which allows to search a place and select it
 class SearchLocation extends Component {
   state = {
+    // text inside the input
     inputText: '',
+    // data fetched from the API which is an array of Object {
+    //  lat: float64,
+    //  lon: float64,
+    //  stop_name: string,
+    //  type: string
+    // }
+    data: [],
   }
 
+  // called every time the user changes the input
+  onChangeText = async inputText => {
+    // near real-time update
+    this.setState({ inputText });
+
+    // fetch the data from the API and update our state with it
+    const response = await fetch(`https://taka-api.aksels.io/search-location/${inputText}`);
+    const data = await response.json();
+    this.setState({ data });
+  }
+
+  // called when the user selects an option
   select = ({ lat, lon, text }) => {
-    console.log('select', lat, lon, text);
+    // dispatch the event that the user selected a Place
+    this.props.onSelect({ lat, lng: lon, name: text });
+
+    // update the input text with the place name to make sure the user
+    // understands that his choice is validated and clear the data from the
+    // API which is no longer used
+    this.setState({ inputText: text, data: [] });
   }
 
   render() {
     return (
       <View>
+        {/* user input */}
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          onChangeText={inputText => this.setState({ inputText })}
+          style={styles.input}
+          onChangeText={this.onChangeText}
           value={this.state.inputText}
+          placeholder={this.props.placeholder}
         />
+
+        {/* suggestions */}
         <FlatList
-          keyExtractor={item => item.stop_name}
-          data={[
-            {lat: 0, lon: 0, stop_name: 'Devin'},
-            {lat: 0, lon: 0, stop_name: 'Jackson'},
-            {lat: 0, lon: 0, stop_name: 'James'},
-            {lat: 0, lon: 0, stop_name: 'Joel'},
-            {lat: 0, lon: 0, stop_name: 'John'},
-            {lat: 0, lon: 0, stop_name: 'Jillian'},
-            {lat: 0, lon: 0, stop_name: 'Jimmy'},
-            {lat: 0, lon: 0, stop_name: 'Julie'},
-          ]}
+          keyExtractor={item => String(item.stop_name)}
+          data={this.state.data}
           renderItem={({item}) => (
             <Text style={styles.item} onPress={() => this.select({
               lat: item.lat,
@@ -53,7 +77,26 @@ class SearchLocation extends Component {
   }
 };
 
+SearchLocation.propTypes = {
+  /* functions */
+  onSelect: T.func.isRequired,
+
+  /* data */
+  placeholder: T.string.isRequired,
+};
+
+/* component styles */
 const styles = StyleSheet.create({
+  item: {
+    padding: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 8,
+    paddingLeft: 16,
+  },
 });
 
 export default SearchLocation;

@@ -23,7 +23,14 @@ export default class HomeScreen extends React.Component {
   };
 
   state = {
-    fromInput: '',
+    // Objects of this shape
+    // {
+    //    lat: float
+    //    lng: float
+    //    name: string
+    // }
+    from: null,
+    to: null,
   }
 
   render() {
@@ -32,7 +39,8 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
           <View>
-            <SearchLocation />
+            <SearchLocation placeholder="Départ.." onSelect={place => this.setState({ from: place })} />
+            <SearchLocation placeholder="Destination.." onSelect={place => this.setState({ to: place })} />
           </View>
           <View style={styles.welcomeContainer}>
             <Image

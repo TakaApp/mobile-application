@@ -30,9 +30,9 @@ class SearchLocation extends Component {
   };
 
   // called when the user selects an option
-  select = ({ lat, lon, text }) => {
+  select = ({ lat, lng, text }) => {
     // dispatch the event that the user selected a Place
-    this.props.onSelect({ lat, lng: lon, name: text });
+    this.props.onSelect({ lat, lng, name: text });
 
     // update the input text with the place name to make sure the user
     // understands that his choice is validated and clear the data from the
@@ -53,7 +53,7 @@ class SearchLocation extends Component {
 
         {/* suggestions */}
         <FlatList
-          keyExtractor={item => String(item.stop_name)}
+          keyExtractor={item => `${item.name}${item.lat}`}
           data={this.state.data}
           renderItem={({ item }) => (
             <Text
@@ -61,11 +61,11 @@ class SearchLocation extends Component {
               onPress={() =>
                 this.select({
                   lat: item.lat,
-                  lon: item.lon,
-                  text: item.stop_name,
+                  lng: item.lng,
+                  text: item.name,
                 })
               }>
-              {item.stop_name}
+              {item.name}
             </Text>
           )}
         />

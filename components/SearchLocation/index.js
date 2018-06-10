@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import {
-  StyleSheet,
-
-  View,
-  Text,
-  FlatList,
-  TextInput,
-} from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput } from 'react-native';
 
 // SearchLocation is a component connected to Taka API
 // which allows to search a place and select it
@@ -23,7 +16,7 @@ class SearchLocation extends Component {
     //  type: string
     // }
     data: [],
-  }
+  };
 
   // called every time the user changes the input
   onChangeText = async inputText => {
@@ -34,7 +27,7 @@ class SearchLocation extends Component {
     const response = await fetch(`https://taka-api.aksels.io/search-location/${inputText}`);
     const data = await response.json();
     this.setState({ data });
-  }
+  };
 
   // called when the user selects an option
   select = ({ lat, lon, text }) => {
@@ -45,7 +38,7 @@ class SearchLocation extends Component {
     // understands that his choice is validated and clear the data from the
     // API which is no longer used
     this.setState({ inputText: text, data: [] });
-  }
+  };
 
   render() {
     return (
@@ -62,12 +55,16 @@ class SearchLocation extends Component {
         <FlatList
           keyExtractor={item => String(item.stop_name)}
           data={this.state.data}
-          renderItem={({item}) => (
-            <Text style={styles.item} onPress={() => this.select({
-              lat: item.lat,
-              lon: item.lon,
-              text: item.stop_name,
-            })}>
+          renderItem={({ item }) => (
+            <Text
+              style={styles.item}
+              onPress={() =>
+                this.select({
+                  lat: item.lat,
+                  lon: item.lon,
+                  text: item.stop_name,
+                })
+              }>
               {item.stop_name}
             </Text>
           )}
@@ -75,7 +72,7 @@ class SearchLocation extends Component {
       </View>
     );
   }
-};
+}
 
 SearchLocation.propTypes = {
   /* functions */

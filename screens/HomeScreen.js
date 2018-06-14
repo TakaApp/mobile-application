@@ -7,15 +7,12 @@ import {
   Text,
   TouchableOpacity,
   View,
-
-  TextInput,
-  FlatList,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-import SearchLocation from '../components/SearchLocation';
+import RouteSearchForm from '../components/RouteSearchForm';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -23,25 +20,21 @@ export default class HomeScreen extends React.Component {
   };
 
   state = {
-    // Objects of this shape
-    // {
-    //    lat: float
-    //    lng: float
-    //    name: string
-    // }
-    from: null,
-    to: null,
-  }
+    results: [],
+  };
+
+  onItineraryResults = results => {
+    console.log('results', results);
+
+    this.setState({ results });
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <RouteSearchForm onResults={this.onItineraryResults} />
 
-          <View>
-            <SearchLocation placeholder="Départ.." onSelect={place => this.setState({ from: place })} />
-            <SearchLocation placeholder="Destination.." onSelect={place => this.setState({ to: place })} />
-          </View>
           <View style={styles.welcomeContainer}>
             <Image
               source={

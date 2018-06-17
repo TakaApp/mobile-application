@@ -59,7 +59,7 @@ class RouteSearchForm extends Component {
         }),
       });
       const data = await response.json();
-      this.props.onResults(data.plan.itineraries);
+      this.props.onResults(data.plan.itineraries || []);
     } catch (error) {
       console.log('error', error, Object.keys(error));
     }

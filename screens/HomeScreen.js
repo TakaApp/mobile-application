@@ -21,6 +21,7 @@ export default class HomeScreen extends React.Component {
   };
 
   state = {
+    loading: false,
     results: [],
     hasSearched: false,
   };
@@ -28,22 +29,23 @@ export default class HomeScreen extends React.Component {
   onItineraryResults = results => {
     console.log('results', results);
 
-    this.setState({ results, hasSearched: true });
-  };
-
-  renderIt = result => {
-    return (
-      <View>
-        <Text>lol</Text>
-      </View>
-    );
+    this.setState({ results, hasSearched: true, loading: false });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <RouteSearchForm onResults={this.onItineraryResults} />
+          <RouteSearchForm
+            onResults={this.onItineraryResults}
+            onSearch={() => this.setState({ loading: true })}
+          />
+
+          {this.state.loading && (
+            <View>
+              <Text>Recherche en cours..</Text>
+            </View>
+          )}
 
           {/* interaries */}
           {this.state.hasSearched && (

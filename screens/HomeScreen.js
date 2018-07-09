@@ -12,15 +12,29 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+import RouteSearchForm from '../components/RouteSearchForm';
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
+  };
+
+  state = {
+    results: [],
+  };
+
+  onItineraryResults = results => {
+    console.log('results', results);
+
+    this.setState({ results });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <RouteSearchForm onResults={this.onItineraryResults} />
+
           <View style={styles.welcomeContainer}>
             <Image
               source={

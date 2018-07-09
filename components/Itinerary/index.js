@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
+import moment from 'moment';
 
 import { View, Text } from 'react-native';
+
+import LegType from '../../components/LegType';
 
 // Itinerary is a component that displays an itinerary
 // with its different legs
@@ -13,15 +16,35 @@ class Itinerary extends Component {
   render() {
     const { itinerary: i } = this.props;
     return (
-      <View>
-        <Text>{Math.round(i.duration / 60)} minutes de trajet</Text>
+      <View style={{ marginBottom: 16 }}>
+        <View style={{ display: 'flex', flexDirection: 'column' }}>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              {i.legs.map((leg, index) => (
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <LegType leg={leg} />
+                  {index !== i.legs.length - 1 && <Text style={{ padding: 4 }}>{' > '}</Text>}
+                </View>
+              ))}
+            </View>
+            <View>
+              <Text style={{ padding: 4 }}>{Math.round(i.duration / 60)} min ></Text>
+            </View>
+          </View>
+        </View>
+        <View>
+          <Text>
+            {moment(i.startTime).format('HH:mm')}
+            {' - '}
+            {moment(i.endTime).format('HH:mm')}
+          </Text>
+        </View>
       </View>
     );
   }
 }
 
 Itinerary.propTypes = {
-  /* functions */
   itinerary: T.shape({
     // duration <seconds>
     duration: T.number.isRequired,

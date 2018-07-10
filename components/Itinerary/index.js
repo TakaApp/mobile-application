@@ -16,23 +16,41 @@ class Itinerary extends Component {
   render() {
     const { itinerary: i } = this.props;
     return (
-      <View style={{ marginBottom: 16 }}>
+      <View
+        style={{
+          marginBottom: 8,
+          paddingBottom: 8,
+          borderBottomRadius: 4,
+          borderBottomWidth: 0.5,
+          borderBottomColor: '#CCCCCC',
+        }}>
         <View style={{ display: 'flex', flexDirection: 'column' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View
+              style={{
+                flex: 4,
+                display: 'flex',
+                flexDirection: 'row',
+              }}>
+              {/* Legs Walk > Bus > Walk ... */}
               {i.legs.map((leg, index) => (
-                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <View
+                  key={index}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignContent: 'center',
+                    alignItems: 'center',
+                  }}>
                   <LegType leg={leg} />
-                  {index !== i.legs.length - 1 && <Text style={{ padding: 4 }}>{' > '}</Text>}
+                  {index !== i.legs.length - 1 && <Text style={{ color: '#CCCCCC' }}>{' > '}</Text>}
                 </View>
               ))}
             </View>
-            <View>
-              <Text style={{ padding: 4 }}>{Math.round(i.duration / 60)} min ></Text>
-            </View>
+            <Text style={{ flex: 1, padding: 4 }}>{Math.round(i.duration / 60)} min ></Text>
           </View>
         </View>
-        <View>
+        <View style={{ marginTop: 8 }}>
           <Text>
             {moment(i.startTime).format('HH:mm')}
             {' - '}

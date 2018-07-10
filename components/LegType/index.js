@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
+
+const imageStyle = {
+  resizeMode: 'contain',
+  height: 20,
+  width: 20,
+};
 
 const modeToDisplay = type => {
   switch (type) {
     case 'WALK':
-      return 'M';
+      return <Image source={require('../../assets/images/walk.png')} style={imageStyle} />;
     case 'BUS':
-      return 'B';
+      return <Image source={require('../../assets/images/bus.png')} style={imageStyle} />;
     case 'TRAM':
-      return 'T';
+      return <Image source={require('../../assets/images/tram.png')} style={imageStyle} />;
     default:
-      return '?';
+      return <Text style={{ padding: 4, flex: 1 }}>?</Text>;
   }
 };
 
@@ -22,10 +28,37 @@ class LegType extends Component {
   render() {
     const { leg: l } = this.props;
     return (
-      <View style={{ display: 'flex', flexDirection: 'row' }}>
-        <Text style={{ padding: 4 }}>{modeToDisplay(l.mode)}</Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignContent: 'center',
+          alignItems: 'center',
+        }}>
+        {modeToDisplay(l.mode)}
+
         {l.mode !== 'WALK' && (
-          <Text style={{ backgroundColor: `#${l.routeColor}`, padding: 4 }}>{l.route}</Text>
+          <Text
+            style={{
+              backgroundColor: `#${l.routeColor}`,
+              textAlign: 'center',
+              paddingLeft: 4,
+              paddingRight: 4,
+              marginLeft: 4,
+            }}>
+            {l.route}
+          </Text>
+        )}
+        {l.mode === 'WALK' && (
+          <Text
+            style={{
+              textAlign: 'left',
+              color: '#424242',
+              marginTop: 8,
+            }}>
+            {Math.round(l.duration / 60)}
+          </Text>
         )}
       </View>
     );

@@ -49,8 +49,7 @@ export default class HomeScreen extends React.Component {
 
           {/* interaries */}
           {this.state.hasSearched && (
-            <View>
-              <Text>{this.state.results.length} résultats</Text>
+            <View style={{ padding: 8 }}>
               {this.state.results.map(result => <Itinerary itinerary={result} />)}
             </View>
           )}

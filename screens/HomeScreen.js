@@ -27,7 +27,7 @@ export default class HomeScreen extends React.Component {
   };
 
   onItineraryResults = results => {
-    console.log('results', results);
+    // console.log('results', results);
 
     this.setState({ results, hasSearched: true, loading: false });
   };
@@ -50,7 +50,14 @@ export default class HomeScreen extends React.Component {
           {/* interaries */}
           {this.state.hasSearched && (
             <View style={{ padding: 8 }}>
-              {this.state.results.map(result => <Itinerary itinerary={result} />)}
+              {this.state.results.map(result => (
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('Itinerary', { itinerary: result })
+                  }>
+                  <Itinerary itinerary={result} />
+                </TouchableOpacity>
+              ))}
             </View>
           )}
 

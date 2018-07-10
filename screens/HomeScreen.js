@@ -13,6 +13,7 @@ import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
 
 import RouteSearchForm from '../components/RouteSearchForm';
+import Itinerary from '../components/Itinerary';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -20,20 +21,38 @@ export default class HomeScreen extends React.Component {
   };
 
   state = {
+    loading: false,
     results: [],
+    hasSearched: false,
   };
 
   onItineraryResults = results => {
     console.log('results', results);
 
-    this.setState({ results });
+    this.setState({ results, hasSearched: true, loading: false });
   };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <RouteSearchForm onResults={this.onItineraryResults} />
+          <RouteSearchForm
+            onResults={this.onItineraryResults}
+            onSearch={() => this.setState({ loading: true })}
+          />
+
+          {this.state.loading && (
+            <View>
+              <Text>Recherche en cours..</Text>
+            </View>
+          )}
+
+          {/* interaries */}
+          {this.state.hasSearched && (
+            <View style={{ padding: 8 }}>
+              {this.state.results.map(result => <Itinerary itinerary={result} />)}
+            </View>
+          )}
 
           <View style={styles.welcomeContainer}>
             <Image

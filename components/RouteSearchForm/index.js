@@ -38,6 +38,7 @@ class RouteSearchForm extends Component {
   change = (fromTo, place) => this.setState({ [fromTo]: place }, this.lookForRoute);
 
   lookForRoute = async () => {
+    this.props.onSearch();
     console.log('@lookForRoute', this.state);
     const { from, to } = this.state;
     if (!from || !to) return;
@@ -59,7 +60,7 @@ class RouteSearchForm extends Component {
         }),
       });
       const data = await response.json();
-      this.props.onResults(data.plan.itineraries);
+      this.props.onResults(data.plan.itineraries || []);
     } catch (error) {
       console.log('error', error, Object.keys(error));
     }
@@ -80,6 +81,7 @@ class RouteSearchForm extends Component {
 RouteSearchForm.propTypes = {
   /* functions */
   onResults: T.func.isRequired,
+  onSearch: T.func.isRequired,
 };
 
 export default RouteSearchForm;

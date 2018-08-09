@@ -20,7 +20,7 @@ class Itinerary extends Component {
         style={{
           marginBottom: 8,
           paddingBottom: 8,
-          borderBottomRadius: 4,
+          borderRadius: 4,
           borderBottomWidth: 0.5,
           borderBottomColor: '#CCCCCC',
         }}>

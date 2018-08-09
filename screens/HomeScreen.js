@@ -50,8 +50,9 @@ export default class HomeScreen extends React.Component {
           {/* interaries */}
           {this.state.hasSearched && (
             <View style={{ padding: 8 }}>
-              {this.state.results.map(result => (
+              {this.state.results.map((result, index) => (
                 <TouchableOpacity
+                  key={index}
                   onPress={() =>
                     this.props.navigation.navigate('Itinerary', { itinerary: result })
                   }>

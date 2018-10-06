@@ -54,7 +54,7 @@ class RouteSearchForm extends Component {
         body: JSON.stringify({
           arriveBy: 'false',
           time: '10:30',
-          date: '06-07-2018',
+          date: '12-12-2018',
           from: `${this.state.from.lat},${this.state.from.lng}`,
           to: `${this.state.to.lat},${this.state.to.lng}`,
         }),

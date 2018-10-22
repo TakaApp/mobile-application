@@ -6,7 +6,11 @@ import { Text } from 'react-native';
 class Place extends Component {
   render() {
     const { data } = this.props;
-    return <Text>{data.name.toLowerCase() === 'origin' ? 'Point de départ' : data.name}</Text>;
+    return (
+      <Text style={{ fontWeight: '700' }}>
+        {data.name.toLowerCase() === 'origin' ? 'Point de départ' : data.name}
+      </Text>
+    );
   }
 }
 

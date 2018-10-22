@@ -2,7 +2,10 @@ import React from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
 import LegType from '../../components/LegType';
+
 import LegWalk from './LegWalk';
+import LegTram from './LegTram';
+import LegBus from './LegBus';
 
 export default class ItineraryScreen extends React.Component {
   render() {
@@ -38,11 +41,11 @@ export default class ItineraryScreen extends React.Component {
           </View>
           {/* Leg details */}
           <View>
-            <Text>lol</Text>
             {i.legs.map((leg, index) => (
               <View key={index}>
-                <Text>{leg.mode}</Text>
-                {leg.mode === 'WALK' && <LegWalk leg={leg} />}
+                {leg.mode === 'WALK' && <LegWalk leg={leg} index={index} />}
+                {leg.mode === 'TRAM' && <LegTram leg={leg} index={index} />}
+                {leg.mode === 'BUS' && <LegBus leg={leg} index={index} />}
               </View>
             ))}
           </View>

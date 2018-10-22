@@ -27,6 +27,7 @@ const modeToDisplay = type => {
 class LegType extends Component {
   render() {
     const { leg: l } = this.props;
+
     return (
       <View
         style={{
@@ -42,6 +43,7 @@ class LegType extends Component {
           <Text
             style={{
               backgroundColor: `#${l.routeColor}`,
+              color: l.routeTextColor ? `#${l.routeTextColor}` : '#000',
               textAlign: 'center',
               paddingLeft: 4,
               paddingRight: 4,

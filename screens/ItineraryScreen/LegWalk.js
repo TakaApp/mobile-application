@@ -7,6 +7,7 @@ import Duration from '../../components/Duration';
 import Place from '../../components/Place';
 
 import LegStyle from '../../StyleSheets/Leg';
+import LegType from '../../components/LegType';
 
 export default class WalkLeg extends React.Component {
   render() {
@@ -19,10 +20,12 @@ export default class WalkLeg extends React.Component {
         {/* leg illustration */}
         <View style={LegStyle.illustration}>
           <View class="start-time">{index === 0 && <Hour timestamp={leg.startTime} />}</View>
-          <Image source={require('../../assets/images/walk.png')} style={styles.icon} />
-          <Text style={styles.dot}>•</Text>
-          <Text style={styles.dot}>•</Text>
-          <Text style={styles.dot}>•</Text>
+          <LegType leg={leg} />
+          <View style={styles.line}>
+            <Text style={styles.dot}>•</Text>
+            <Text style={styles.dot}>•</Text>
+            <Text style={styles.dot}>•</Text>
+          </View>
           <Text style={styles.endTime}>
             <Hour timestamp={leg.endTime} />
           </Text>
@@ -53,9 +56,12 @@ export default class WalkLeg extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    resizeMode: 'contain',
-    height: 20,
-    width: 20,
+  line: {
+    minHeight: 82,
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

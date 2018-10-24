@@ -19,9 +19,7 @@ export default class BugLeg extends React.Component {
         {/* leg illustration */}
         <View style={LegStyle.illustration}>
           <LegType leg={leg} />
-          <Text style={styles.dot}>•</Text>
-          <Text style={styles.dot}>•</Text>
-          <Text style={styles.dot}>•</Text>
+          <View style={styles.line} />
           <Text style={styles.endTime}>
             <Hour timestamp={leg.endTime} />
           </Text>
@@ -61,13 +59,13 @@ export default class BugLeg extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  dot: {},
-  icon: {
-    resizeMode: 'contain',
-    height: 20,
-    width: 20,
+  line: {
+    borderRightColor: '#000000',
+    borderRightWidth: 2,
+    flexGrow: 1,
+    flexShrink: 0,
+    minHeight: 64,
   },
-  endTime: {},
   nextDepartures: {
     flexDirection: 'row',
   },

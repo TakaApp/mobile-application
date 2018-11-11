@@ -6,9 +6,9 @@ import Distance from '../../../components/Distance';
 import Place from '../../../components/Place';
 
 import LegStyle from '../../../StyleSheets/Leg';
-import LegType from '../../../components/LegType';
 
 import LegDuration from './components/Duration';
+import LegIllustration from './components/Illustration';
 
 export default class WalkLeg extends React.Component {
   render() {
@@ -19,18 +19,7 @@ export default class WalkLeg extends React.Component {
     return (
       <View style={LegStyle.container}>
         {/* leg illustration */}
-        <View style={LegStyle.illustration}>
-          <View class="start-time">{index === 0 && <Hour timestamp={leg.startTime} />}</View>
-          <LegType leg={leg} />
-          <View style={styles.line}>
-            <Text style={styles.dot}>•</Text>
-            <Text style={styles.dot}>•</Text>
-            <Text style={styles.dot}>•</Text>
-          </View>
-          <Text style={styles.endTime}>
-            <Hour timestamp={leg.endTime} />
-          </Text>
-        </View>
+        <LegIllustration leg={leg} index={index} />
         {/* leg description */}
         <View style={LegStyle.description}>
           <View style={LegStyle.descriptionItem}>

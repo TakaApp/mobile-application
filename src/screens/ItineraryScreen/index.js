@@ -4,9 +4,7 @@ import moment from 'moment';
 
 import LegType from '../../components/LegType';
 
-import LegWalk from './Legs/LegWalk';
-import LegTram from './Legs/LegTram';
-import LegBus from './Legs/LegBus';
+import LegFactory from './Legs/LegFactory';
 
 export default class ItineraryScreen extends React.Component {
   render() {
@@ -66,15 +64,7 @@ export default class ItineraryScreen extends React.Component {
             </View>
           </View>
           {/* Leg details */}
-          <View>
-            {i.legs.map((leg, index) => (
-              <View key={index}>
-                {leg.mode === 'WALK' && <LegWalk leg={leg} index={index} />}
-                {leg.mode === 'TRAM' && <LegTram leg={leg} index={index} />}
-                {leg.mode === 'BUS' && <LegBus leg={leg} index={index} />}
-              </View>
-            ))}
-          </View>
+          <View>{i.legs.map((leg, index) => LegFactory.build(leg, index))}</View>
           !{' '}
         </View>
       </ScrollView>

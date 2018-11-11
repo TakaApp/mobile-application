@@ -2,28 +2,22 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import Hour from '../../../components/Hour';
-import Duration from '../../../components/Duration';
 import Place from '../../../components/Place';
 
 import LegStyle from '../../../StyleSheets/Leg';
-import LegType from '../../../components/LegType';
+
+import LegDuration from './components/Duration';
+import LegIllustration from './components/Illustration';
 
 export default class BugLeg extends React.Component {
   render() {
-    const { leg } = this.props;
+    const { leg, index } = this.props;
 
     console.log('leg', leg);
 
     return (
       <View style={LegStyle.container}>
-        {/* leg illustration */}
-        <View style={LegStyle.illustration}>
-          <LegType leg={leg} />
-          <View style={styles.line} />
-          <Text style={styles.endTime}>
-            <Hour timestamp={leg.endTime} />
-          </Text>
-        </View>
+        <LegIllustration leg={leg} index={index} />
         {/* leg description */}
         <View style={LegStyle.description}>
           <View style={LegStyle.descriptionItem}>
@@ -43,9 +37,7 @@ export default class BugLeg extends React.Component {
                 {leg.legGeometry.length} arrêt{leg.legGeometry.length > 1 ? 's' : ''}{' '}
               </Text>
             </View>
-            <View>
-              <Duration durationInSeconds={leg.duration} />
-            </View>
+            <LegDuration duration={leg.duration} />
           </View>
           <View style={LegStyle.destination}>
             <View style={{ alignSelf: 'flex-end' }}>
@@ -59,13 +51,6 @@ export default class BugLeg extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  line: {
-    borderRightColor: '#000000',
-    borderRightWidth: 2,
-    flexGrow: 1,
-    flexShrink: 0,
-    minHeight: 64,
-  },
   nextDepartures: {
     flexDirection: 'row',
   },

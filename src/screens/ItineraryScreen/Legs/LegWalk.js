@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
-import Hour from '../../components/Hour';
-import Distance from '../../components/Distance';
-import Duration from '../../components/Duration';
-import Place from '../../components/Place';
+import Hour from '../../../components/Hour';
+import Distance from '../../../components/Distance';
+import Place from '../../../components/Place';
 
-import LegStyle from '../../StyleSheets/Leg';
-import LegType from '../../components/LegType';
+import LegStyle from '../../../StyleSheets/Leg';
+import LegType from '../../../components/LegType';
+
+import LegDuration from './components/Duration';
 
 export default class WalkLeg extends React.Component {
   render() {
@@ -40,9 +41,7 @@ export default class WalkLeg extends React.Component {
               <Text>Marcher </Text>
               <Distance distanceInMeters={leg.distance} />
             </View>
-            <View>
-              <Duration durationInSeconds={leg.duration} />
-            </View>
+            <LegDuration duration={leg.duration} />
           </View>
           <View style={LegStyle.destination}>
             <View style={{ alignSelf: 'flex-end' }}>

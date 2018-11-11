@@ -4,9 +4,9 @@ import moment from 'moment';
 
 import LegType from '../../components/LegType';
 
-import LegWalk from './LegWalk';
-import LegTram from './LegTram';
-import LegBus from './LegBus';
+import LegWalk from './Legs/LegWalk';
+import LegTram from './Legs/LegTram';
+import LegBus from './Legs/LegBus';
 
 export default class ItineraryScreen extends React.Component {
   render() {

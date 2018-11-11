@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
-import Hour from '../../components/Hour';
-import Duration from '../../components/Duration';
-import Place from '../../components/Place';
+import Hour from '../../../components/Hour';
+import Duration from '../../../components/Duration';
+import Place from '../../../components/Place';
 
-import LegStyle from '../../StyleSheets/Leg';
-import LegType from '../../components/LegType';
+import LegStyle from '../../../StyleSheets/Leg';
+import LegType from '../../../components/LegType';
 
 export default class TramLeg extends React.Component {
   render() {

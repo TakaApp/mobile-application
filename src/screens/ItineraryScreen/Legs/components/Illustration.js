@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import LegStyle from 'src/StyleSheets/Leg';
-
-import Hour from 'src/components/Hour';
-import LegType from 'src/components/LegType';
+import LegStyle from '@/StyleSheets/Leg';
+import Hour from '@/components/Hour';
+import LegType from '@/components/LegType';
 
 const LegIllustration = ({ leg, index }) => {
   let content;

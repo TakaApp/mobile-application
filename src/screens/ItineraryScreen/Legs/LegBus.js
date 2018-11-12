@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import Hour from '../../../components/Hour';
-import Place from '../../../components/Place';
-
-import LegStyle from '../../../StyleSheets/Leg';
+import Hour from '@/components/Hour';
+import Place from '@/components/Place';
+import LegStyle from '@/StyleSheets/Leg';
 
 import LegDuration from './components/Duration';
 import LegIllustration from './components/Illustration';

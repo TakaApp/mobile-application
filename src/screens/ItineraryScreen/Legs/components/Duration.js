@@ -1,7 +1,7 @@
 import React from 'react';
-
 import { View, Text } from 'react-native';
-import Duration from '../../../../components/Duration';
+
+import Duration from '@/components/Duration';
 
 const LegDuration = ({ duration }) => (
   <View>

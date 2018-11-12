@@ -1,11 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import Hour from '../../../components/Hour';
-import Distance from '../../../components/Distance';
-import Place from '../../../components/Place';
-
-import LegStyle from '../../../StyleSheets/Leg';
+import Distance from '@/components/Distance';
+import Place from '@/components/Place';
+import LegStyle from '@/StyleSheets/Leg';
 
 import LegDuration from './components/Duration';
 import LegIllustration from './components/Illustration';
@@ -22,9 +20,7 @@ export default class WalkLeg extends React.Component {
         <LegIllustration leg={leg} index={index} />
         {/* leg description */}
         <View style={LegStyle.description}>
-          <View style={LegStyle.descriptionItem}>
-            <View>{index === 0 ? <Place data={leg.from} /> : <Text />}</View>
-          </View>
+          <View style={LegStyle.descriptionItem}>{index === 0 && <Place data={leg.from} />}</View>
           <View style={LegStyle.descriptionItem}>
             <View style={{ display: 'flex', flexDirection: 'row' }}>
               <Text>Marcher </Text>
@@ -33,9 +29,7 @@ export default class WalkLeg extends React.Component {
             <LegDuration duration={leg.duration} />
           </View>
           <View style={LegStyle.destination}>
-            <View style={{ alignSelf: 'flex-end' }}>
-              <Place data={leg.to} />
-            </View>>
+            <Place data={leg.to} />
           </View>
         </View>
       </View>

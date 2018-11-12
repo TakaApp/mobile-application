@@ -1,12 +1,10 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
-import moment from 'moment';
-
-import LegType from '../../components/LegType';
+import React, { Component } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import LegFactory from './Legs/LegFactory';
+import Header from './Header';
 
-export default class ItineraryScreen extends React.Component {
+class ItineraryScreen extends Component {
   render() {
     const { navigation } = this.props;
     const i = navigation.getParam('itinerary', {});
@@ -15,58 +13,8 @@ export default class ItineraryScreen extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
-        <View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              backgroundColor: '#000',
-              paddingTop: 16,
-              paddingBottom: 16,
-            }}>
-            <View
-              style={{
-                alignContent: 'center',
-                paddingLeft: 8,
-                paddingRight: 8,
-              }}>
-              <Text style={{ color: '#FFF' }}>Depart à</Text>
-              <Text style={styles.departureTime}>{moment(i.startTime).format('HH:mm')}</Text>
-            </View>
-            <View>
-              <Text style={{ flex: 1, padding: 4, color: '#FFF' }}>
-                Durée: {Math.round(i.duration / 60)} min ·{' '}
-                <Text style={{ color: '#1e88e5' }}>{moment(i.endTime).format('HH:mm')}</Text>
-              </Text>
-              <View
-                style={{
-                  flex: 4,
-                  display: 'flex',
-                  flexDirection: 'row',
-                }}>
-                {/* Legs Walk > Bus > Walk ... */}
-                {i.legs.map((leg, index) => (
-                  <View
-                    key={index}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <LegType leg={leg} />
-                    {index !== i.legs.length - 1 && (
-                      <Text style={{ color: '#CCCCCC' }}>{' > '}</Text>
-                    )}
-                  </View>
-                ))}
-              </View>
-            </View>
-          </View>
-          {/* Leg details */}
-          <View>{i.legs.map((leg, index) => LegFactory.build(leg, index))}</View>
-          !{' '}
-        </View>
+        <Header itinerary={i} />
+        {i.legs.map(LegFactory.build)}
       </ScrollView>
     );
   }
@@ -78,8 +26,6 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     backgroundColor: '#fff',
   },
-  departureTime: {
-    fontSize: 32,
-    color: '#FFF',
-  },
 });
+
+export default ItineraryScreen;

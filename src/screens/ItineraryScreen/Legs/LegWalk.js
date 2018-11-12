@@ -36,14 +36,3 @@ export default class WalkLeg extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  line: {
-    minHeight: 82,
-    display: 'flex',
-    flexDirection: 'column',
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

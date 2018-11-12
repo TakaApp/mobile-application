@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+import textStyle from '@/StyleSheets/text';
 import { hour, secondsToMinutesF } from '@/utils/time';
 import LegType from '@/components/LegType';
+import { black, white, blue } from '@/utils/colors';
 
 export default class ItineraryScreen extends Component {
   render() {
     const { itinerary: i } = this.props;
+
+    console.log('textStyle', textStyle);
 
     return (
       <View
         style={{
           display: 'flex',
           flexDirection: 'row',
-          backgroundColor: '#000',
+          backgroundColor: black,
           paddingTop: 16,
           paddingBottom: 16,
         }}>
@@ -23,13 +27,13 @@ export default class ItineraryScreen extends Component {
             paddingLeft: 8,
             paddingRight: 8,
           }}>
-          <Text style={{ color: '#FFF' }}>Depart à</Text>
+          <Text style={textStyle.white}>Depart à</Text>
           <Text style={styles.departureTime}>{hour(i.startTime)}</Text>
         </View>
         <View>
-          <Text style={{ flex: 1, padding: 4, color: '#FFF' }}>
+          <Text style={{ flex: 1, padding: 4, color: '#FFF', fontWeight: 'bold' }}>
             Durée: {secondsToMinutesF(i.duration)} ·{' '}
-            <Text style={{ color: '#1e88e5' }}>{hour(i.endTime)}</Text>
+            <Text style={{ color: blue }}>{hour(i.endTime)}</Text>
           </Text>
           <View
             style={{
@@ -61,6 +65,6 @@ export default class ItineraryScreen extends Component {
 const styles = StyleSheet.create({
   departureTime: {
     fontSize: 32,
-    color: '#FFF',
+    color: white,
   },
 });

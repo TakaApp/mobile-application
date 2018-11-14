@@ -42,7 +42,7 @@ export default class TramLeg extends React.Component {
           <View style={LegStyle.destination}>
             <View style={{ alignSelf: 'flex-end' }}>
               <Place data={leg.to} />
-            </View>>
+            </View>
           </View>
         </View>
       </View>

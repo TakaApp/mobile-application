@@ -54,9 +54,16 @@ export default class HomeScreen extends React.Component {
           {this.state.hasSearched && (
             <View>
               {this.state.results.map((result, index) => (
-                <View key={index}>
+                <View
+                  key={index}
+                  style={{
+                    marginBottom: 8,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    backgroundColor: '#FFF',
+                  }}>
                   <TouchableOpacity onPress={this.toggleItinerary(index)}>
-                    <Header itinerary={result} />
+                    <Header itinerary={result} isSelected={selected === index} />
                   </TouchableOpacity>
                   {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
                 </View>
@@ -72,6 +79,6 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fcfcfc',
   },
 });

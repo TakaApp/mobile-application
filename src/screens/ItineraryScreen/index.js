@@ -1,21 +1,70 @@
-import React, { Component } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import RouteSearchForm from '@/components/RouteSearchForm';
 
 import LegFactory from './Legs/LegFactory';
 import Header from './Header';
 
-class ItineraryScreen extends Component {
-  render() {
-    const { navigation } = this.props;
-    const i = navigation.getParam('itinerary', {});
+export default class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
 
-    console.log('i', i);
+  state = {
+    loading: false,
+    results: [],
+    hasSearched: false,
+
+    selected: -1,
+  };
+
+  toggleItinerary = index => () => {
+    const { selected } = this.state;
+
+    if (index === selected) {
+      this.setState({ selected: -1 });
+      return;
+    }
+    this.setState({ selected: index });
+  };
+
+  onItineraryResults = results => {
+    this.setState({ results, hasSearched: true, loading: false });
+  };
+
+  render() {
+    const { selected } = this.state;
 
     return (
-      <ScrollView style={styles.container}>
-        <Header itinerary={i} />
-        {i.legs.map(LegFactory.build)}
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <RouteSearchForm
+            onResults={this.onItineraryResults}
+            onSearch={() => this.setState({ loading: true })}
+          />
+
+          {this.state.loading && (
+            <View>
+              <Text>Recherche en cours..</Text>
+            </View>
+          )}
+
+          {/* itineraries */}
+          {this.state.hasSearched && (
+            <View>
+              {this.state.results.map((result, index) => (
+                <View key={index}>
+                  <TouchableOpacity onPress={this.toggleItinerary(index)}>
+                    <Header itinerary={result} />
+                  </TouchableOpacity>
+                  {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
+                </View>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -23,9 +72,6 @@ class ItineraryScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
     backgroundColor: '#fff',
   },
 });
-
-export default ItineraryScreen;

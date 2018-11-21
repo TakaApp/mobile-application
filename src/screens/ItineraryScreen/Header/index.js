@@ -10,8 +10,6 @@ export default class ItineraryScreen extends Component {
   render() {
     const { itinerary: i } = this.props;
 
-    console.log('textStyle', textStyle);
-
     return (
       <View
         style={{

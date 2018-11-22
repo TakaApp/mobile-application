@@ -1,9 +1,15 @@
 import React from 'react';
+
+import 'moment/locale/fr';
+import moment from 'moment';
+
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
+
+moment.locale('fr');
 
 export default class App extends React.Component {
   state = {

@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import { View, Button, StyleSheet } from 'react-native';
-import { black, blue, red } from '@/utils/colors';
+import moment from 'moment';
+
+import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
+
+import { white, black, blue, red } from '@/utils/colors';
 
 import SearchLocation from '../SearchLocation';
 
@@ -17,6 +22,8 @@ class RouteSearchForm extends Component {
     //    lng: float
     //    name: string
     // }
+    date: new Date(),
+    arriveBy: false,
     from: null,
     to: null,
 
@@ -36,11 +43,14 @@ class RouteSearchForm extends Component {
   // called every time the users selects a suggestion
   // and when the state is updated we eventually look
   // for a route
-  change = (fromTo, place) => this.setState({ [fromTo]: place }, this.lookForRoute);
+  change = (thing, place) => this.setState({ [thing]: place }, this.lookForRoute);
 
   lookForRoute = async () => {
+    const { arriveBy, date } = this.state;
+
+    this.setState({ dateOptionsOpened: false });
     this.props.onSearch();
-    console.log('@lookForRoute', this.state);
+
     const { from, to } = this.state;
     if (!from || !to) return;
 
@@ -53,21 +63,30 @@ class RouteSearchForm extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          arriveBy: 'false',
-          time: '10:30',
-          date: '12-12-2018',
+          arriveBy: arriveBy ? 'true' : 'false',
+          time: moment(date).format('HH:mm'),
+          date: moment(date).format('MM-DD-YYYY'),
           from: `${this.state.from.lat},${this.state.from.lng}`,
           to: `${this.state.to.lat},${this.state.to.lng}`,
         }),
       });
       const data = await response.json();
       this.props.onResults(data.plan.itineraries || []);
+
     } catch (error) {
       console.log('error', error, Object.keys(error));
+      // TODO gestion d'erreur
     }
   };
 
+  openDateOptions = () => this.setState({ dateOptionsOpened: true })
+
+  setDate = date => this.setState({ date })
+  setArriveBy = arriveBy => () => this.setState({ arriveBy });
+
   render() {
+    const { dateOptionsOpened, arriveBy } = this.state;
+
     return (
       <View style={styles.container}>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -82,7 +101,52 @@ class RouteSearchForm extends Component {
             <SearchLocation placeholder="Destination.." onSelect={place => this.change('to', place)} />
           </View>
         </View>
-        <Button onPress={this.lookForRoute} title="Rechercher" />
+
+        <TouchableOpacity onPress={this.openDateOptions}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View style={styles.itineraryillustration}>
+              <Ionicons name="ios-time" size={16} color={black} />
+            </View>
+            <View style={{ ...styles.itineraryillustration, flexGrow: 1 }}>
+              <Text>{arriveBy ? 'Arrivée' : 'Départ'} : {moment(this.state.date).calendar().toLowerCase()}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        {dateOptionsOpened &&
+          <View>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button onPress={() => this.setState({ date: new Date(), arriveBy: false })} title="Maintenant" />
+              <View style={{ display: 'flex', flexDirection: 'row' }}>
+
+                <TouchableOpacity onPress={this.setArriveBy(false)}>
+                  <LinearGradient
+                    colors={arriveBy ? [] : ['#5f6fee', '#5f8eee']}
+                    style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                    <Text style={{ color: arriveBy ? black : white }}>Partir à</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.setArriveBy(true)}>
+                  <LinearGradient
+                    colors={arriveBy ? ['#5f6fee', '#5f8eee'] : []}
+                    style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                    <Text style={{ color: arriveBy ? white : black }}>Arriver à</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <DatePickerIOS
+              date={this.state.date}
+              onDateChange={this.setDate}
+            />
+          </View>
+        }
+        <TouchableOpacity onPress={this.lookForRoute}>
+          <LinearGradient
+            colors={['#5f6fee', '#5f8eee']}
+            style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+            <Text style={{ color: white }}>Rechercher</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -99,6 +163,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingLeft: 8,
     paddingRight: 8,
+    marginBottom: 32,
   },
   line: {
     borderRightColor: black,
@@ -120,6 +185,9 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 16,
     paddingBottom: 16,
+  },
+  datePicker: {
+    flexGrow: 1,
   }
 });
 

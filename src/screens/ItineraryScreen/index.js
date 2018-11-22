@@ -38,18 +38,16 @@ export default class HomeScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        <RouteSearchForm
+          onResults={this.onItineraryResults}
+          onSearch={() => this.setState({ loading: true })}
+        />
+        {this.state.loading && (
+          <View>
+            <Text>Recherche en cours..</Text>
+          </View>
+        )}
         <ScrollView style={styles.container}>
-          <RouteSearchForm
-            onResults={this.onItineraryResults}
-            onSearch={() => this.setState({ loading: true })}
-          />
-
-          {this.state.loading && (
-            <View>
-              <Text>Recherche en cours..</Text>
-            </View>
-          )}
-
           {/* itineraries */}
           {this.state.hasSearched && (
             <View>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "taka",
-    "description": "A very interesting project.",
+    "name": "Taka",
+    "description": "Transports à Nantes",
     "slug": "taka",
     "privacy": "public",
     "sdkVersion": "31.0.0",
@@ -19,7 +19,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.akselsme.taka"
     }
   }
 }

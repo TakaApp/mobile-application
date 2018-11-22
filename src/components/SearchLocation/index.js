@@ -3,6 +3,8 @@ import T from 'prop-types';
 
 import { StyleSheet, View, Text, FlatList, TextInput } from 'react-native';
 
+import { black } from '@/utils/colors';
+
 // SearchLocation is a component connected to Taka API
 // which allows to search a place and select it
 class SearchLocation extends Component {
@@ -89,10 +91,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: black,
     borderWidth: 1,
-    marginTop: 8,
-    paddingLeft: 16,
+    paddingLeft: 8,
+    borderRadius: 4,
   },
 });
 

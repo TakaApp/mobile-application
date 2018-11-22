@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import { View, Button } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
+import { black, blue, red } from '@/utils/colors';
 
 import SearchLocation from '../SearchLocation';
 
@@ -68,10 +69,19 @@ class RouteSearchForm extends Component {
 
   render() {
     return (
-      <View>
-        <SearchLocation placeholder="Départ.." onSelect={place => this.change('from', place)} />
-        <SearchLocation placeholder="Destination.." onSelect={place => this.change('to', place)} />
-
+      <View style={styles.container}>
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <View style={styles.itineraryillustration}>
+            <View style={{ ...styles.dot, borderColor: red }} />
+            <View style={styles.line} />
+            <View style={{ ...styles.dot, borderColor: blue }} />
+          </View>
+          <View style={{ flexGrow: 1 }}>
+            <SearchLocation placeholder="Départ.." onSelect={place => this.change('from', place)} />
+            <View style={{ marginBottom: 8 }} />
+            <SearchLocation placeholder="Destination.." onSelect={place => this.change('to', place)} />
+          </View>
+        </View>
         <Button onPress={this.lookForRoute} title="Rechercher" />
       </View>
     );
@@ -83,5 +93,34 @@ RouteSearchForm.propTypes = {
   onResults: T.func.isRequired,
   onSearch: T.func.isRequired,
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 32,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  line: {
+    borderRightColor: black,
+    borderRightWidth: 2,
+    flexGrow: 1,
+    flexShrink: 0,
+  },
+  dot: {
+    minHeight: 4,
+
+    borderWidth: 4,
+    borderRadius: 180,
+
+    top: 2,
+    right: -3,
+  },
+  itineraryillustration: {
+    paddingLeft: 8,
+    paddingRight: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
+  }
+});
 
 export default RouteSearchForm;

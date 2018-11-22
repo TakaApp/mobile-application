@@ -138,15 +138,22 @@ class RouteSearchForm extends Component {
               date={this.state.date}
               onDateChange={this.setDate}
             />
+            <TouchableOpacity onPress={this.lookForRoute}>
+              <LinearGradient
+                colors={['#5f6fee', '#5f8eee']}
+                style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                <Text style={{ color: white }}>Rechercher</Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
         }
-        <TouchableOpacity onPress={this.lookForRoute}>
-          <LinearGradient
-            colors={['#5f6fee', '#5f8eee']}
-            style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
-            <Text style={{ color: white }}>Rechercher</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        {/*<TouchableOpacity onPress={this.lookForRoute}>*/}
+        {/*  <LinearGradient*/}
+        {/*    colors={['#5f6fee', '#5f8eee']}*/}
+        {/*    style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>*/}
+        {/*    <Text style={{ color: white }}>Rechercher</Text>*/}
+        {/*  </LinearGradient>*/}
+        {/*</TouchableOpacity>*/}
       </View>
     );
   }
@@ -160,10 +167,10 @@ RouteSearchForm.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 32,
+    marginTop: 16,
     paddingLeft: 8,
     paddingRight: 8,
-    marginBottom: 32,
+    marginBottom: 16,
   },
   line: {
     borderRightColor: black,
@@ -177,7 +184,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderRadius: 180,
 
-    top: 2,
+    top: 0,
     right: -3,
   },
   itineraryillustration: {

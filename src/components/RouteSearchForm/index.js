@@ -108,9 +108,15 @@ class RouteSearchForm extends Component {
             <View style={{ ...styles.dot, borderColor: blue }} />
           </View>
           <View style={{ flexGrow: 1 }}>
-            <SearchLocation placeholder="Départ.." onSelect={place => this.change('from', place)} inputText={fromText} onInputChange={text => this.setState({ fromText: text })} />
+            <SearchLocation placeholder="Départ.." onSelect={place => {
+              this.change('from', place);
+              this.setState({ fromText: place.name });
+            }} inputText={fromText} onInputChange={text => this.setState({ fromText: text })} />
             <View style={{ marginBottom: 8 }} />
-            <SearchLocation placeholder="Destination.." onSelect={place => this.change('to', place)} inputText={toText} onInputChange={text => this.setState({ toText: text })} />
+            <SearchLocation placeholder="Destination.." onSelect={place => {
+              this.change('to', place);
+              this.setState({ toText: place.name });
+            }} inputText={toText} onInputChange={text => this.setState({ toText: text })} />
           </View>
           <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
             <TouchableOpacity onPress={this.reverseFromTo}>

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import { StyleSheet, View, Text, FlatList, TextInput } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { Location, Permissions } from 'expo';
+
+import { MaterialIcons } from '@expo/vector-icons'
 
 import { black } from '@/utils/colors';
 
@@ -16,6 +19,21 @@ class SearchLocation extends Component {
     //  type: string
     // }
     data: [],
+  };
+
+  getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+
+    this.props.onSelect({ lat: location.coords.latitude, lng: location.coords.longitude, name: 'Mon emplacement' });
   };
 
   // called every time the user changes the input
@@ -42,12 +60,20 @@ class SearchLocation extends Component {
     return (
       <View>
         {/* user input */}
-        <TextInput
-          style={styles.input}
-          onChangeText={this.onChangeText}
-          value={this.props.inputText}
-          placeholder={this.props.placeholder}
-        />
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <TextInput
+            style={styles.input}
+            onChangeText={this.onChangeText}
+            value={this.props.inputText}
+            placeholder={this.props.placeholder}
+          />
+
+          <View style={{ position: 'absolute', right: 8, top: 8 }}>
+            <TouchableOpacity onPress={this.getLocationAsync}>
+              <MaterialIcons name="my-location" size={24} />
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* suggestions */}
         <FlatList
@@ -94,6 +120,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 8,
     borderRadius: 4,
+    flexGrow: 1,
   },
 });
 

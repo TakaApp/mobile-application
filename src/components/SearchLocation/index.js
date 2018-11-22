@@ -4,7 +4,7 @@ import T from 'prop-types';
 import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { Location, Permissions } from 'expo';
 
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { black } from '@/utils/colors';
 
@@ -33,7 +33,11 @@ class SearchLocation extends Component {
 
     let location = await Location.getCurrentPositionAsync({});
 
-    this.props.onSelect({ lat: location.coords.latitude, lng: location.coords.longitude, name: 'Mon emplacement' });
+    this.props.onSelect({
+      lat: location.coords.latitude,
+      lng: location.coords.longitude,
+      name: 'Mon emplacement',
+    });
   };
 
   // called every time the user changes the input

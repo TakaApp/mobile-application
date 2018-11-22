@@ -75,27 +75,29 @@ class RouteSearchForm extends Component {
       });
       const data = await response.json();
       this.props.onResults(data.plan.itineraries || []);
-
     } catch (error) {
       console.log('error', error, Object.keys(error));
       // TODO gestion d'erreur
     }
   };
 
-  openDateOptions = () => this.setState({ dateOptionsOpened: true })
+  openDateOptions = () => this.setState({ dateOptionsOpened: true });
 
-  setDate = date => this.setState({ date })
+  setDate = date => this.setState({ date });
   setArriveBy = arriveBy => () => this.setState({ arriveBy });
   reverseFromTo = () => {
     const { from, to, fromText, toText } = this.state;
 
-    this.setState({
-      from: to,
-      to: from,
-      fromText: toText,
-      toText: fromText,
-    }, this.lookForRoute);
-  }
+    this.setState(
+      {
+        from: to,
+        to: from,
+        fromText: toText,
+        toText: fromText,
+      },
+      this.lookForRoute
+    );
+  };
   render() {
     const { dateOptionsOpened, arriveBy, toText, fromText } = this.state;
 
@@ -108,19 +110,29 @@ class RouteSearchForm extends Component {
             <View style={{ ...styles.dot, borderColor: blue }} />
           </View>
           <View style={{ flexGrow: 1 }}>
-            <SearchLocation placeholder="Départ.." onSelect={place => {
-              this.change('from', place);
-              this.setState({ fromText: place.name });
-            }} inputText={fromText} onInputChange={text => this.setState({ fromText: text })} />
+            <SearchLocation
+              placeholder="Départ.."
+              onSelect={place => {
+                this.change('from', place);
+                this.setState({ fromText: place.name });
+              }}
+              inputText={fromText}
+              onInputChange={text => this.setState({ fromText: text })}
+            />
             <View style={{ marginBottom: 8 }} />
-            <SearchLocation placeholder="Destination.." onSelect={place => {
-              this.change('to', place);
-              this.setState({ toText: place.name });
-            }} inputText={toText} onInputChange={text => this.setState({ toText: text })} />
+            <SearchLocation
+              placeholder="Destination.."
+              onSelect={place => {
+                this.change('to', place);
+                this.setState({ toText: place.name });
+              }}
+              inputText={toText}
+              onInputChange={text => this.setState({ toText: text })}
+            />
           </View>
-          <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+          <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <TouchableOpacity onPress={this.reverseFromTo}>
-              <View style={{ alignSelf: 'flex-end' }}>
+              <View>
                 <MaterialIcons name="swap-vert" size={32} color={black} />
               </View>
             </TouchableOpacity>
@@ -133,16 +145,29 @@ class RouteSearchForm extends Component {
               <Ionicons name="ios-time" size={16} color={black} />
             </View>
             <View style={{ ...styles.itineraryillustration, flexGrow: 1 }}>
-              <Text>{arriveBy ? 'Arrivée' : 'Départ'} : {moment(this.state.date).calendar().toLowerCase()}</Text>
+              <Text>
+                {arriveBy ? 'Arrivée' : 'Départ'} :{' '}
+                {moment(this.state.date)
+                  .calendar()
+                  .toLowerCase()}
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
-        {dateOptionsOpened &&
+        {dateOptionsOpened && (
           <View>
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Button onPress={() => this.setState({ date: new Date(), arriveBy: false })} title="Maintenant" />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Button
+                onPress={() => this.setState({ date: new Date(), arriveBy: false })}
+                title="Maintenant"
+              />
               <View style={{ display: 'flex', flexDirection: 'row' }}>
-
                 <TouchableOpacity onPress={this.setArriveBy(false)}>
                   <LinearGradient
                     colors={arriveBy ? [] : ['#5f6fee', '#5f8eee']}
@@ -159,10 +184,7 @@ class RouteSearchForm extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-            <DatePickerIOS
-              date={this.state.date}
-              onDateChange={this.setDate}
-            />
+            <DatePickerIOS date={this.state.date} onDateChange={this.setDate} />
             <TouchableOpacity onPress={this.lookForRoute}>
               <LinearGradient
                 colors={['#5f6fee', '#5f8eee']}
@@ -171,7 +193,7 @@ class RouteSearchForm extends Component {
               </LinearGradient>
             </TouchableOpacity>
           </View>
-        }
+        )}
         {/*<TouchableOpacity onPress={this.lookForRoute}>*/}
         {/*  <LinearGradient*/}
         {/*    colors={['#5f6fee', '#5f8eee']}*/}
@@ -220,7 +242,7 @@ const styles = StyleSheet.create({
   },
   datePicker: {
     flexGrow: 1,
-  }
+  },
 });
 
 export default RouteSearchForm;

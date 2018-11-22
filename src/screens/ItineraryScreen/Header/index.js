@@ -5,7 +5,7 @@ import { LinearGradient } from 'expo';
 import textStyle from '@/StyleSheets/text';
 import { hour, secondsToMinutesF } from '@/utils/time';
 import LegType from '@/components/LegType';
-import { black, white, blue } from '@/utils/colors';
+import { black, blue } from '@/utils/colors';
 
 export default class ItineraryScreen extends Component {
   render() {
@@ -15,12 +15,13 @@ export default class ItineraryScreen extends Component {
       <LinearGradient
         colors={isSelected ? ['#9795EF', '#F9C5D1'] : ['#F5E3E6', '#D9E4F5']}
         style={{
-          alignItems: 'center', borderRadius: 5, shadowColor: '#dddddd',
+          alignItems: 'center',
+          borderRadius: 5,
+          shadowColor: '#dddddd',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.8,
           shadowRadius: 2,
-        }}
-      >
+        }}>
         <View style={styles.container}>
           <View
             style={{

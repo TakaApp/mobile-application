@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import T from 'prop-types';
 
 import { Text } from 'react-native';
 
-class Distance extends Component {
-  render() {
-    const { distanceInMeters } = this.props;
-    return <Text>{Math.round(distanceInMeters)}m</Text>;
-  }
-}
+const Distance = ({ distanceInMeters }) => <Text>{Math.round(distanceInMeters)}m</Text>;
 
 Distance.propTypes = {
   distanceInMeters: T.number.isRequired,

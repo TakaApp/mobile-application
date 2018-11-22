@@ -4,7 +4,7 @@ import 'moment/locale/fr';
 import moment from 'moment';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Constants } from 'expo';
+import { ScreenOrientation, AppLoading, Asset, Font, Constants } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
 import { notTotallyWhite } from '@/utils/colors';
@@ -17,6 +17,10 @@ export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
+
+  componentDidMount() {
+    ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {

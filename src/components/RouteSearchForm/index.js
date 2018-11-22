@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import { white, black, blue, red } from '@/utils/colors';
 
@@ -24,6 +24,10 @@ class RouteSearchForm extends Component {
     // }
     date: new Date(),
     arriveBy: false,
+
+    fromText: '',
+    toText: '',
+
     from: null,
     to: null,
 
@@ -46,12 +50,11 @@ class RouteSearchForm extends Component {
   change = (thing, place) => this.setState({ [thing]: place }, this.lookForRoute);
 
   lookForRoute = async () => {
-    const { arriveBy, date } = this.state;
+    const { arriveBy, date, from, to } = this.state;
 
     this.setState({ dateOptionsOpened: false });
     this.props.onSearch();
 
-    const { from, to } = this.state;
     if (!from || !to) return;
 
     // fetch the data from the API and update our state with it
@@ -83,9 +86,18 @@ class RouteSearchForm extends Component {
 
   setDate = date => this.setState({ date })
   setArriveBy = arriveBy => () => this.setState({ arriveBy });
+  reverseFromTo = () => {
+    const { from, to, fromText, toText } = this.state;
 
+    this.setState({
+      from: to,
+      to: from,
+      fromText: toText,
+      toText: fromText,
+    }, this.lookForRoute);
+  }
   render() {
-    const { dateOptionsOpened, arriveBy } = this.state;
+    const { dateOptionsOpened, arriveBy, toText, fromText } = this.state;
 
     return (
       <View style={styles.container}>
@@ -96,9 +108,16 @@ class RouteSearchForm extends Component {
             <View style={{ ...styles.dot, borderColor: blue }} />
           </View>
           <View style={{ flexGrow: 1 }}>
-            <SearchLocation placeholder="Départ.." onSelect={place => this.change('from', place)} />
+            <SearchLocation placeholder="Départ.." onSelect={place => this.change('from', place)} inputText={fromText} onInputChange={text => this.setState({ fromText: text })} />
             <View style={{ marginBottom: 8 }} />
-            <SearchLocation placeholder="Destination.." onSelect={place => this.change('to', place)} />
+            <SearchLocation placeholder="Destination.." onSelect={place => this.change('to', place)} inputText={toText} onInputChange={text => this.setState({ toText: text })} />
+          </View>
+          <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+            <TouchableOpacity onPress={this.reverseFromTo}>
+              <View style={{ alignSelf: 'flex-end' }}>
+                <MaterialIcons name="swap-vert" size={32} color={black} />
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
 

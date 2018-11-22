@@ -9,8 +9,6 @@ import { black } from '@/utils/colors';
 // which allows to search a place and select it
 class SearchLocation extends Component {
   state = {
-    // text inside the input
-    inputText: '',
     // data fetched from the API which is an array of Object {
     //  lat: float64,
     //  lon: float64,
@@ -22,9 +20,7 @@ class SearchLocation extends Component {
 
   // called every time the user changes the input
   onChangeText = async inputText => {
-    // near real-time update
-    this.setState({ inputText });
-
+    this.props.onInputChange(inputText);
     // fetch the data from the API and update our state with it
     const response = await fetch(`https://taka-api.aksels.io/search-location/${inputText}`);
     const data = await response.json();
@@ -49,7 +45,7 @@ class SearchLocation extends Component {
         <TextInput
           style={styles.input}
           onChangeText={this.onChangeText}
-          value={this.state.inputText}
+          value={this.props.inputText}
           placeholder={this.props.placeholder}
         />
 
@@ -79,9 +75,12 @@ class SearchLocation extends Component {
 SearchLocation.propTypes = {
   /* functions */
   onSelect: T.func.isRequired,
+  onInputChange: T.func.isRequired,
 
   /* data */
   placeholder: T.string.isRequired,
+  // text inside the input
+  inputText: T.string.isRequired,
 };
 
 /* component styles */

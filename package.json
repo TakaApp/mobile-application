@@ -1,7 +1,12 @@
 {
+  "name": "taka",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject",
     "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "jest": {
@@ -9,16 +14,17 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
-    "expo": "28.0.0",
+    "eslint": "^5.9.0",
+    "eslint-config-universe": "^1.0.7",
+    "expo": "^31.0.2",
     "moment": "^2.22.2",
-    "react": "16.3.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
-    "react-navigation": "2.0.0"
+    "prettier": "^1.15.2",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-navigation": "^2.18.2"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-universe": "^1.0.7",
-    "jest-expo": "28.0.0",
-    "prettier": "^1.13.5"
+    "babel-preset-expo": "^5.0.0",
+    "jest-expo": "^31.0.0"
   }
 }

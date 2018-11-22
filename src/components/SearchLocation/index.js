@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import { StyleSheet, View, Text, FlatList, TextInput } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { Location, Permissions } from 'expo';
+
+import { MaterialIcons } from '@expo/vector-icons';
+
+import { black } from '@/utils/colors';
 
 // SearchLocation is a component connected to Taka API
 // which allows to search a place and select it
 class SearchLocation extends Component {
   state = {
-    // text inside the input
-    inputText: '',
     // data fetched from the API which is an array of Object {
     //  lat: float64,
     //  lon: float64,
@@ -18,11 +21,28 @@ class SearchLocation extends Component {
     data: [],
   };
 
+  getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+
+    this.props.onSelect({
+      lat: location.coords.latitude,
+      lng: location.coords.longitude,
+      name: 'Mon emplacement',
+    });
+  };
+
   // called every time the user changes the input
   onChangeText = async inputText => {
-    // near real-time update
-    this.setState({ inputText });
-
+    this.props.onInputChange(inputText);
     // fetch the data from the API and update our state with it
     const response = await fetch(`https://taka-api.aksels.io/search-location/${inputText}`);
     const data = await response.json();
@@ -44,12 +64,20 @@ class SearchLocation extends Component {
     return (
       <View>
         {/* user input */}
-        <TextInput
-          style={styles.input}
-          onChangeText={this.onChangeText}
-          value={this.state.inputText}
-          placeholder={this.props.placeholder}
-        />
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <TextInput
+            style={styles.input}
+            onChangeText={this.onChangeText}
+            value={this.props.inputText}
+            placeholder={this.props.placeholder}
+          />
+
+          <View style={{ position: 'absolute', right: 8, top: 8 }}>
+            <TouchableOpacity onPress={this.getLocationAsync}>
+              <MaterialIcons name="my-location" size={24} />
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* suggestions */}
         <FlatList
@@ -77,9 +105,12 @@ class SearchLocation extends Component {
 SearchLocation.propTypes = {
   /* functions */
   onSelect: T.func.isRequired,
+  onInputChange: T.func.isRequired,
 
   /* data */
   placeholder: T.string.isRequired,
+  // text inside the input
+  inputText: T.string.isRequired,
 };
 
 /* component styles */
@@ -89,10 +120,11 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: black,
     borderWidth: 1,
-    marginTop: 8,
-    paddingLeft: 16,
+    paddingLeft: 8,
+    borderRadius: 4,
+    flexGrow: 1,
   },
 });
 

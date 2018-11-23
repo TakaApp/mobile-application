@@ -3,15 +3,16 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import SettingsScreen from '../screens/SettingsScreen';
+import InfoScreen from '../screens/InfoScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const HomeStack = createStackNavigator({
   Itinerary: ItineraryScreen,
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Taka',
+  tabBarLabel: '',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -24,12 +25,22 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
+const InfoStack = createStackNavigator({
+  Info: InfoScreen,
+});
+
+InfoStack.navigationOptions = {
+  // tabBarLabel: 'Infos',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-options'} />
+  ),
+};
+
+const PreferencesStack = createStackNavigator({
   Settings: SettingsScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+PreferencesStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
@@ -37,5 +48,10 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  SettingsStack,
-});
+  PreferencesStack,
+  InfoStack,
+}, {
+    tabBarOptions: {
+      showLabel: false,
+    }
+  });

@@ -1,7 +1,15 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
 
+import isEmpty from 'lodash/isEmpty';
 import RouteSearchForm from '@/components/RouteSearchForm';
 import { notTotallyWhite, trueBlack } from '@/utils/colors';
 
@@ -42,11 +50,11 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerMainText}>Recherche</Text>
-          <Ionicons name="ios-search" size={32} color={trueBlack} />
+          <Image source={require('@/assets/images/icon.png')} style={{ height: 32, width: 32 }} />
         </View>
         <RouteSearchForm
           onResults={this.onItineraryResults}
-          onSearch={() => this.setState({ loading: true })}
+          onSearch={() => this.setState({ loading: true, results: [] })}
         />
         {this.state.loading && (
           <View style={styles.loading}>
@@ -55,6 +63,9 @@ export default class HomeScreen extends React.Component {
         )}
         <ScrollView style={styles.container}>
           {/* itineraries */}
+          {!this.state.loading && this.state.hasSearched && isEmpty(this.state.results) && (
+            <Text style={{ textAlign: 'center' }}>Aucun résultat trouvé :(</Text>
+          )}
           {this.state.hasSearched && (
             <View>
               {this.state.results.map((result, index) => (

@@ -15,11 +15,7 @@ HomeStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-search'
-          : 'md-information-circle'
-      }
+      name={Platform.OS === 'ios' ? 'ios-search' : 'md-information-circle'}
     />
   ),
 };
@@ -37,5 +33,5 @@ SettingsStack.navigationOptions = {
 
 export default createBottomTabNavigator({
   HomeStack,
-  SettingsStack,
+  // SettingsStack,
 });

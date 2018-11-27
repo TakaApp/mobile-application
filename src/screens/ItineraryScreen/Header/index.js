@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { LinearGradient } from 'expo';
 
@@ -13,7 +13,7 @@ export default class ItineraryScreen extends Component {
 
     return (
       <LinearGradient
-        colors={isSelected ? ['#9795EF', '#F9C5D1'] : ['#F5E3E6', '#D9E4F5']}
+        colors={isSelected ? ['#B0F3F1', '#FFCFDF'] : ['#F5F7FA', '#B8C6DB']}
         style={{
           alignItems: 'center',
           borderRadius: 5,
@@ -59,8 +59,12 @@ export default class ItineraryScreen extends Component {
                     alignContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <LegType leg={leg} />
-                  {index !== i.legs.length - 1 && <Text style={{ color: '#CCCCCC' }}>{' > '}</Text>}
+                  {leg.to.name !== leg.from.name && (
+                    <Fragment>
+                      <LegType leg={leg} compact={i.legs.length > 4} />
+                      {index !== i.legs.length - 1 && <Text style={{ color: black }}>{' > '}</Text>}
+                    </Fragment>
+                  )}
                 </View>
               ))}
             </View>

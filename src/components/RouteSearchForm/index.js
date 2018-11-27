@@ -32,16 +32,16 @@ class RouteSearchForm extends Component {
     to: null,
 
     // remove when ready for production XXX
-    from: {
-      lat: 47.2128,
-      lng: -1.5625,
-      name: 'Place Graslin',
-    },
-    to: {
-      lat: 47.2077,
-      lng: -1.5369,
-      name: 'v Rue René Viviani',
-    },
+    // from: {
+    //   lat: 47.2128,
+    //   lng: -1.5625,
+    //   name: 'Place Graslin',
+    // },
+    // to: {
+    //   lat: 47.2077,
+    //   lng: -1.5369,
+    //   name: 'v Rue René Viviani',
+    // },
   };
 
   // called every time the users selects a suggestion
@@ -51,11 +51,11 @@ class RouteSearchForm extends Component {
 
   lookForRoute = async () => {
     const { arriveBy, date, from, to } = this.state;
-
     this.setState({ dateOptionsOpened: false });
-    this.props.onSearch();
 
     if (!from || !to) return;
+
+    this.props.onSearch();
 
     // fetch the data from the API and update our state with it
     try {

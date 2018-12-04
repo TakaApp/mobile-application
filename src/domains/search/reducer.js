@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import { UPDATE_SEARCH_PARAMETERS } from './constants';
+import { UPDATE_SEARCH_PARAMETERS, RECEIVED_RESULTS } from './constants';
 
 const initialState = {
   parameters: {
@@ -38,6 +38,10 @@ export const search = handleActions(
         ...state.parameters,
         ...action.payload,
       },
+    }),
+    [RECEIVED_RESULTS]: (state, action) => ({
+      ...state,
+      results: action.payload,
     }),
   },
   initialState

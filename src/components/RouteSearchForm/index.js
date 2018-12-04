@@ -1,105 +1,46 @@
 import React, { Component } from 'react';
-import T from 'prop-types';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import moment from 'moment';
 
-import { Animated, View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
+import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
 import { LinearGradient, Constants } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
+import { updateSearchParameters } from '@/domains/search/actions';
 import { white, black, blue, red } from '@/utils/colors';
 
 import SearchLocation from '../SearchLocation';
+import { getSearchParameters } from '../../domains/search/selectors';
 
-// RouteSearchForm is a component connected to Taka API
-// which triggers a search when both from & to state attributes
-// are valid.
 class RouteSearchForm extends Component {
   state = {
-    // Objects of this shape
-    // {
-    //    lat: float
-    //    lng: float
-    //    name: string
-    // }
-    date: new Date(),
-    arriveBy: false,
-
     fromText: '',
     toText: '',
-
-    from: null,
-    to: null,
-
     // remove when ready for production XXX
-    from: {
-      lat: 47.2128,
-      lng: -1.5625,
-      name: 'Place Graslin',
-    },
-    to: {
-      lat: 47.2077,
-      lng: -1.5369,
-      name: 'v Rue René Viviani',
-    },
   };
 
-  // called every time the users selects a suggestion
-  // and when the state is updated we eventually look
-  // for a route
-  change = (thing, place) => this.setState({ [thing]: place }, () => {
-    this.lookForRoute();
-  });
-
-  lookForRoute = async () => {
-    const { arriveBy, date, from, to } = this.state;
-    this.setState({ dateOptionsOpened: false });
-
-    if (!from || !to) return;
-
-    this.props.onSearch();
-
-    // fetch the data from the API and update our state with it
-    try {
-      console.log('calling api');
-      const response = await fetch('https://api.nantes.cool/trip', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          arriveBy: arriveBy ? 'true' : 'false',
-          time: moment(date).format('HH:mm'),
-          date: moment(date).format('MM-DD-YYYY'),
-          from: `${this.state.from.lat},${this.state.from.lng}`,
-          to: `${this.state.to.lat},${this.state.to.lng}`,
-        }),
-      });
-      const data = await response.json();
-      this.props.onResults(data.plan.itineraries || []);
-    } catch (error) {
-      console.log('error', error, Object.keys(error));
-      // TODO gestion d'erreur
-    }
-  };
+  change = (thing, place) => this.props.updateSearchParameters({ [thing]: place });
+  setDate = date => this.props.updateSearchParameters({ date });
+  setArriveBy = arriveBy => () => this.props.updateSearchParameters({ arriveBy });
 
   openDateOptions = () => this.setState({ dateOptionsOpened: true });
 
-  setDate = date => this.setState({ date });
-  setArriveBy = arriveBy => () => this.setState({ arriveBy });
   reverseFromTo = () => {
-    const { from, to, fromText, toText } = this.state;
+    const { fromText, toText } = this.state;
+    const { from, to } = this.props.searchParameters;
 
-    this.setState(
-      {
-        from: to,
-        to: from,
-        fromText: toText,
-        toText: fromText,
-      },
-      this.lookForRoute
-    );
+    this.props.updateSearchParameters({
+      from: to,
+      to: from,
+    });
+
+    this.setState({
+      fromText: toText,
+      toText: fromText,
+    });
   };
   render() {
     const { dateOptionsOpened, arriveBy, toText, fromText } = this.state;
@@ -209,11 +150,7 @@ class RouteSearchForm extends Component {
   }
 }
 
-RouteSearchForm.propTypes = {
-  /* functions */
-  onResults: T.func.isRequired,
-  onSearch: T.func.isRequired,
-};
+RouteSearchForm.propTypes = {};
 
 const styles = StyleSheet.create({
   container: {
@@ -245,4 +182,15 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RouteSearchForm;
+export default connect(
+  state => ({
+    searchParameters: getSearchParameters(state),
+  }),
+  dispatch =>
+    bindActionCreators(
+      {
+        updateSearchParameters,
+      },
+      dispatch
+    )
+)(RouteSearchForm);

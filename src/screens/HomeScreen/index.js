@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { connect } from 'react-redux';
+
 import {
   ScrollView,
   StyleSheet,
@@ -6,25 +9,25 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
-  Image,
 } from 'react-native';
 
-import { MapView, Constants } from 'expo';
+import { MapView } from 'expo';
 import isEmpty from 'lodash/isEmpty';
 import RouteSearchForm from '@/components/RouteSearchForm';
 import { notTotallyWhite, trueBlack } from '@/utils/colors';
 
+import { getSearchParameters, getResults } from '@/domains/search/selectors';
+
 import LegFactory from './Legs/LegFactory';
 import Header from './Header';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
   state = {
     loading: false,
-    results: [],
     hasSearched: false,
 
     selected: -1,
@@ -47,12 +50,14 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { selected } = this.state;
-
+    console.log('props', this.props.searchParameters);
     return (
       <View style={styles.container}>
         <View style={styles.map}>
           <MapView
-            ref={c => { this.map = c; }}
+            ref={c => {
+              this.map = c;
+            }}
             style={{ flexGrow: 1 }}
             initialRegion={{
               latitude: 47.209136,
@@ -61,13 +66,9 @@ export default class HomeScreen extends React.Component {
               longitudeDelta: 0.0421,
             }}
             showsUserLocation
-          >
-          </MapView>
+          />
         </View>
-        <RouteSearchForm
-          onResults={this.onItineraryResults}
-          onSearch={() => this.setState({ loading: true, results: [] })}
-        />
+        <RouteSearchForm />
         {this.state.loading && (
           <View style={styles.loading}>
             <ActivityIndicator />
@@ -80,7 +81,7 @@ export default class HomeScreen extends React.Component {
           )}
           {this.state.hasSearched && (
             <View>
-              {this.state.results.map((result, index) => (
+              {this.props.results.map((result, index) => (
                 <View
                   key={index}
                   style={{
@@ -89,13 +90,10 @@ export default class HomeScreen extends React.Component {
                     paddingRight: 8,
                   }}>
                   <TouchableOpacity
-                    onPress={
-                      () => {
-                        console.log('navigate to');
-                        this.props.navigation.navigate('Itinerary', { itinerary: result });
-                      }
-                    }
-                  >
+                    onPress={() => {
+                      console.log('navigate to');
+                      this.props.navigation.navigate('Itinerary', { itinerary: result });
+                    }}>
                     <Header itinerary={result} isSelected={selected === index} />
                   </TouchableOpacity>
                   {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
@@ -107,11 +105,18 @@ export default class HomeScreen extends React.Component {
         <View>
           <Text>foo</Text>
         </View>
-
       </View>
     );
   }
 }
+
+export default connect(
+  state => ({
+    searchParameters: getSearchParameters(state),
+    results: getResults(state),
+  }),
+  null
+)(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {

@@ -4,6 +4,7 @@ import { createSwitchNavigator } from 'react-navigation';
 
 import MainTabNavigator from './MainTabNavigator';
 import registerForPushNotificationsAsync from '../api/registerForPushNotificationsAsync';
+import NavigationService from '@/services/Navigation';
 
 const AppNavigator = createSwitchNavigator({
   // You could add another route here for authentication.
@@ -21,7 +22,13 @@ export default class RootNavigation extends React.Component {
   }
 
   render() {
-    return <AppNavigator />;
+    return (
+      <AppNavigator
+        ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}
+      />
+    );
   }
 
   _registerForPushNotifications() {

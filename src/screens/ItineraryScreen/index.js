@@ -1,24 +1,18 @@
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
 
-import isEmpty from 'lodash/isEmpty';
-import RouteSearchForm from '@/components/RouteSearchForm';
-import { notTotallyWhite, trueBlack, black } from '@/utils/colors';
+import { Marker } from 'react-native-maps';
 import { Constants, MapView } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
+
+import { notTotallyWhite, black, red, blue } from '@/utils/colors';
+import { getResults, getSearchParameters } from '@/domains/search/selectors';
 
 import LegFactory from './Legs/LegFactory';
 import Header from './Header';
 
-export default class HomeScreen extends React.Component {
+class ItineraryScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -47,8 +41,9 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { selected } = this.state;
-    const { navigation } = this.props;
-    const results = navigation.getParam('results', []);
+    const { results, searchParameters } = this.props;
+
+    console.log('results', results);
 
     return (
       <View style={styles.container}>
@@ -56,9 +51,7 @@ export default class HomeScreen extends React.Component {
           <TouchableOpacity style={styles.goBack} onPress={() => this.props.navigation.goBack()}>
             <Ionicons name="ios-arrow-back" size={32} color="#FFF" />
           </TouchableOpacity>
-          {selected !== -1 &&
-            <Header itinerary={results[selected]} isSelected={true} />
-          }
+          {selected !== -1 && <Header itinerary={results[selected]} isSelected={true} />}
         </View>
         <ScrollView style={styles.container}>
           {results.map((result, index) => (
@@ -70,33 +63,60 @@ export default class HomeScreen extends React.Component {
                 paddingRight: 8,
                 backgroundColor: '#FFF',
               }}>
-              {selected !== index &&
+              {selected !== index && (
                 <TouchableOpacity onPress={this.toggleItinerary(index)}>
                   <Header itinerary={result} isSelected={selected === index} />
                 </TouchableOpacity>
-              }
-              {selected === index && <View style={styles.map}>
-                <MapView
-                  ref={c => { this.map = c; }}
-                  style={{ flexGrow: 1 }}
-                  initialRegion={{
-                    latitude: 47.209136,
-                    longitude: -1.547149,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                  }}
-                  showsUserLocation
-                >
-                </MapView>
-              </View>}
+              )}
+              {selected === index && (
+                <View style={styles.map}>
+                  <MapView
+                    ref={c => {
+                      this.map = c;
+                      this.map.fitToSuppliedMarkers(['From', 'To']);
+                    }}
+                    style={{ flexGrow: 1 }}
+                    initialRegion={{
+                      latitude: 47.209136,
+                      longitude: -1.547149,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    }}
+                    showsUserLocation>
+                    <Marker
+                      identifier="From"
+                      flat
+                      pinColor={red}
+                      coordinate={{
+                        latitude: searchParameters.from.lat,
+                        longitude: searchParameters.from.lng,
+                      }}
+                    />
+                    <Marker
+                      identifier="To"
+                      flat
+                      pinColor={blue}
+                      coordinate={{
+                        latitude: searchParameters.to.lat,
+                        longitude: searchParameters.to.lng,
+                      }}
+                    />
+                  </MapView>
+                </View>
+              )}
               {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
             </View>
           ))}
         </ScrollView>
-      </View >
+      </View>
     );
   }
 }
+
+export default connect(state => ({
+  results: getResults(state),
+  searchParameters: getSearchParameters(state),
+}))(ItineraryScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -126,5 +146,5 @@ const styles = StyleSheet.create({
   goBack: {
     paddingLeft: 16,
     paddingRight: 16,
-  }
+  },
 });

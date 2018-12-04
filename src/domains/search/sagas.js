@@ -39,7 +39,7 @@ function* searchOnParameterChanges() {
       const results = data.plan.itineraries || [];
 
       // on force l'addresse dans le formulaire
-      yield put({ type: RECEIVED_RESULTS, payload: { results } });
+      yield put({ type: RECEIVED_RESULTS, payload: results });
     } catch (e) {
       console.log('ERROR', e);
       yield put({ type: 'ERROR', payload: { error: true } });

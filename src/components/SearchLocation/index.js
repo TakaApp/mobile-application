@@ -44,7 +44,7 @@ class SearchLocation extends Component {
   onChangeText = async inputText => {
     this.props.onInputChange(inputText);
     // fetch the data from the API and update our state with it
-    const response = await fetch(`https://taka-api.aksels.io/search-location/${inputText}`);
+    const response = await fetch(`https://api.nantes.cool/search-location/${inputText}`);
     const data = await response.json();
     this.setState({ data });
   };
@@ -70,6 +70,7 @@ class SearchLocation extends Component {
             onChangeText={this.onChangeText}
             value={this.props.inputText}
             placeholder={this.props.placeholder}
+            onFocus={this.props.onFocus}
           />
 
           <View style={{ position: 'absolute', right: 8, top: 8 }}>
@@ -106,6 +107,7 @@ SearchLocation.propTypes = {
   /* functions */
   onSelect: T.func.isRequired,
   onInputChange: T.func.isRequired,
+  onFocus: T.func,
 
   /* data */
   placeholder: T.string.isRequired,
@@ -120,11 +122,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: black,
-    borderWidth: 1,
     paddingLeft: 8,
     borderRadius: 4,
+
     flexGrow: 1,
+    backgroundColor: '#FFF',
+    shadowColor: '#dddddd',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
 });
 

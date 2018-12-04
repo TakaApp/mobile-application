@@ -11,7 +11,9 @@ import {
 
 import isEmpty from 'lodash/isEmpty';
 import RouteSearchForm from '@/components/RouteSearchForm';
-import { notTotallyWhite, trueBlack } from '@/utils/colors';
+import { notTotallyWhite, trueBlack, black } from '@/utils/colors';
+import { Constants } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
 
 import LegFactory from './Legs/LegFactory';
 import Header from './Header';
@@ -45,48 +47,36 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { selected } = this.state;
+    const { navigation } = this.props;
+    const results = navigation.getParam('results', []);
 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
+          <TouchableOpacity style={styles.goBack} onPress={() => this.props.navigation.goBack()}>
+            <Ionicons name="ios-arrow-back" size={32} color="#FFF" />
+          </TouchableOpacity>
           <Text style={styles.headerMainText}>Recherche</Text>
           <Image source={require('@/assets/images/icon.png')} style={{ height: 32, width: 32 }} />
         </View>
-        <RouteSearchForm
-          onResults={this.onItineraryResults}
-          onSearch={() => this.setState({ loading: true, results: [] })}
-        />
-        {this.state.loading && (
-          <View style={styles.loading}>
-            <ActivityIndicator />
-          </View>
-        )}
         <ScrollView style={styles.container}>
-          {/* itineraries */}
-          {!this.state.loading && this.state.hasSearched && isEmpty(this.state.results) && (
-            <Text style={{ textAlign: 'center' }}>Aucun résultat trouvé :(</Text>
-          )}
-          {this.state.hasSearched && (
-            <View>
-              {this.state.results.map((result, index) => (
-                <View
-                  key={index}
-                  style={{
-                    marginBottom: 8,
-                    paddingLeft: 8,
-                    paddingRight: 8,
-                    backgroundColor: '#FFF',
-                  }}>
-                  <TouchableOpacity onPress={this.toggleItinerary(index)}>
-                    <Header itinerary={result} isSelected={selected === index} />
-                  </TouchableOpacity>
-                  {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
-                </View>
-              ))}
+          {results.map((result, index) => (
+            <View
+              key={index}
+              style={{
+                marginBottom: 8,
+                paddingLeft: 8,
+                paddingRight: 8,
+                backgroundColor: '#FFF',
+              }}>
+              <TouchableOpacity onPress={this.toggleItinerary(index)}>
+                <Header itinerary={result} isSelected={selected === index} />
+              </TouchableOpacity>
+              {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
             </View>
-          )}
+          ))}
         </ScrollView>
-      </View>
+      </View >
     );
   }
 }
@@ -94,11 +84,12 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fcfcfc',
   },
   header: {
-    backgroundColor: notTotallyWhite,
+    backgroundColor: black,
     padding: 16,
+    paddingTop: Constants.statusBarHeight + 16,
+    paddingLeft: 0,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -110,9 +101,13 @@ const styles = StyleSheet.create({
   headerMainText: {
     fontSize: 32,
     fontFamily: 'comfortaa',
-    color: trueBlack,
+    color: '#FFF',
   },
   loading: {
     marginBottom: 16,
   },
+  goBack: {
+    paddingLeft: 16,
+    paddingRight: 16,
+  }
 });

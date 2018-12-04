@@ -3,8 +3,8 @@ import T from 'prop-types';
 
 import moment from 'moment';
 
-import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo';
+import { Animated, View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
+import { LinearGradient, Constants } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import { white, black, blue, red } from '@/utils/colors';
@@ -32,22 +32,24 @@ class RouteSearchForm extends Component {
     to: null,
 
     // remove when ready for production XXX
-    // from: {
-    //   lat: 47.2128,
-    //   lng: -1.5625,
-    //   name: 'Place Graslin',
-    // },
-    // to: {
-    //   lat: 47.2077,
-    //   lng: -1.5369,
-    //   name: 'v Rue René Viviani',
-    // },
+    from: {
+      lat: 47.2128,
+      lng: -1.5625,
+      name: 'Place Graslin',
+    },
+    to: {
+      lat: 47.2077,
+      lng: -1.5369,
+      name: 'v Rue René Viviani',
+    },
   };
 
   // called every time the users selects a suggestion
   // and when the state is updated we eventually look
   // for a route
-  change = (thing, place) => this.setState({ [thing]: place }, this.lookForRoute);
+  change = (thing, place) => this.setState({ [thing]: place }, () => {
+    this.lookForRoute();
+  });
 
   lookForRoute = async () => {
     const { arriveBy, date, from, to } = this.state;
@@ -59,7 +61,8 @@ class RouteSearchForm extends Component {
 
     // fetch the data from the API and update our state with it
     try {
-      const response = await fetch('https://taka-api.aksels.io/trip', {
+      console.log('calling api');
+      const response = await fetch('https://api.nantes.cool/trip', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -121,7 +124,7 @@ class RouteSearchForm extends Component {
             />
             <View style={{ marginBottom: 8 }} />
             <SearchLocation
-              placeholder="Destination.."
+              placeholder="Où est-ce qu'on va ?"
               onSelect={place => {
                 this.change('to', place);
                 this.setState({ toText: place.name });
@@ -194,13 +197,13 @@ class RouteSearchForm extends Component {
             </TouchableOpacity>
           </View>
         )}
-        {/*<TouchableOpacity onPress={this.lookForRoute}>*/}
-        {/*  <LinearGradient*/}
-        {/*    colors={['#5f6fee', '#5f8eee']}*/}
-        {/*    style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>*/}
-        {/*    <Text style={{ color: white }}>Rechercher</Text>*/}
-        {/*  </LinearGradient>*/}
-        {/*</TouchableOpacity>*/}
+        <TouchableOpacity onPress={this.lookForRoute}>
+          <LinearGradient
+            colors={['#5f6fee', '#5f8eee']}
+            style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+            <Text style={{ color: white }}>Rechercher</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -214,9 +217,11 @@ RouteSearchForm.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 16,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingTop: Constants.statusBarHeight + 16,
+  },
+  map: {
+    display: 'flex',
+    height: 128,
     marginBottom: 16,
   },
   line: {

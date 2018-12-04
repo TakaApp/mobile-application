@@ -219,11 +219,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight + 16,
   },
-  map: {
-    display: 'flex',
-    height: 128,
-    marginBottom: 16,
-  },
   line: {
     borderRightColor: black,
     borderRightWidth: 2,

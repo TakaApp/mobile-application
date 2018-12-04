@@ -56,8 +56,9 @@ export default class HomeScreen extends React.Component {
           <TouchableOpacity style={styles.goBack} onPress={() => this.props.navigation.goBack()}>
             <Ionicons name="ios-arrow-back" size={32} color="#FFF" />
           </TouchableOpacity>
-          <Text style={styles.headerMainText}>Recherche</Text>
-          <Image source={require('@/assets/images/icon.png')} style={{ height: 32, width: 32 }} />
+          {selected !== -1 &&
+            <Header itinerary={results[selected]} isSelected={true} />
+          }
         </View>
         <ScrollView style={styles.container}>
           {results.map((result, index) => (
@@ -69,9 +70,11 @@ export default class HomeScreen extends React.Component {
                 paddingRight: 8,
                 backgroundColor: '#FFF',
               }}>
-              <TouchableOpacity onPress={this.toggleItinerary(index)}>
-                <Header itinerary={result} isSelected={selected === index} />
-              </TouchableOpacity>
+              {selected !== index &&
+                <TouchableOpacity onPress={this.toggleItinerary(index)}>
+                  <Header itinerary={result} isSelected={selected === index} />
+                </TouchableOpacity>
+              }
               {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
             </View>
           ))}
@@ -84,6 +87,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: notTotallyWhite,
   },
   header: {
     backgroundColor: black,
@@ -97,11 +101,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-  },
-  headerMainText: {
-    fontSize: 32,
-    fontFamily: 'comfortaa',
-    color: '#FFF',
   },
   loading: {
     marginBottom: 16,

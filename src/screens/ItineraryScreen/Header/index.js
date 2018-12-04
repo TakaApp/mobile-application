@@ -13,14 +13,13 @@ export default class ItineraryScreen extends Component {
 
     return (
       <LinearGradient
-        colors={isSelected ? ['#B0F3F1', '#FFCFDF'] : ['#F5F7FA', '#B8C6DB']}
+        colors={isSelected ? ['#B0F3F1', '#FFCFDF'] : ['#FFF', '#FFF']}
         style={{
-          alignItems: 'center',
-          borderRadius: 5,
           shadowColor: '#dddddd',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.8,
-          shadowRadius: 2,
+          shadowRadius: 4,
+          borderRadius: 4,
         }}>
         <View style={styles.container}>
           <View
@@ -83,7 +82,8 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: 'transparent',
-    padding: 8,
+    padding: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 });

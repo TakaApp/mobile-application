@@ -12,7 +12,7 @@ import {
 import isEmpty from 'lodash/isEmpty';
 import RouteSearchForm from '@/components/RouteSearchForm';
 import { notTotallyWhite, trueBlack, black } from '@/utils/colors';
-import { Constants } from 'expo';
+import { Constants, MapView } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
 import LegFactory from './Legs/LegFactory';
@@ -75,6 +75,20 @@ export default class HomeScreen extends React.Component {
                   <Header itinerary={result} isSelected={selected === index} />
                 </TouchableOpacity>
               }
+              {selected === index && <View style={styles.map}>
+                <MapView
+                  ref={c => { this.map = c; }}
+                  style={{ flexGrow: 1 }}
+                  initialRegion={{
+                    latitude: 47.209136,
+                    longitude: -1.547149,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  }}
+                  showsUserLocation
+                >
+                </MapView>
+              </View>}
               {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
             </View>
           ))}
@@ -88,6 +102,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: notTotallyWhite,
+  },
+  map: {
+    flexGrow: 1,
+    height: 256,
   },
   header: {
     backgroundColor: black,

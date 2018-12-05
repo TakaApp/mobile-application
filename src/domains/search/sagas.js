@@ -8,17 +8,9 @@ import { getSearchParameters } from './selectors';
 
 function* searchOnParameterChanges() {
   yield takeLatest([UPDATE_SEARCH_PARAMETERS], function* f(action) {
-    console.log('ON UPDATE SEARCH PARAMS');
-    console.log('ON UPDATE SEARCH PARAMS');
-    console.log('ON UPDATE SEARCH PARAMS');
-    console.log('ON UPDATE SEARCH PARAMS');
-    console.log('ON UPDATE SEARCH PARAMS');
-    console.log('ON UPDATE SEARCH PARAMS');
     const sp = yield select(getSearchParameters);
     // invalid parameters
     if (!sp.from || !sp.to) return;
-
-    console.log('searching');
 
     try {
       const response = yield fetch('https://api.nantes.cool/trip', {

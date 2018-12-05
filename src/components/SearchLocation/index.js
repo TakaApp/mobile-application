@@ -81,23 +81,25 @@ class SearchLocation extends Component {
         </View>
 
         {/* suggestions */}
-        <FlatList
-          keyExtractor={item => `${item.name}${item.lat}`}
-          data={this.state.data}
-          renderItem={({ item }) => (
-            <Text
-              style={styles.item}
-              onPress={() =>
-                this.select({
-                  lat: item.lat,
-                  lng: item.lng,
-                  text: item.name,
-                })
-              }>
-              {item.name}
-            </Text>
-          )}
-        />
+        <View style={{ position: 'absolute', top: 32 }}>
+          <FlatList
+            keyExtractor={item => `${item.name}${item.lat}`}
+            data={this.state.data}
+            renderItem={({ item }) => (
+              <Text
+                style={styles.item}
+                onPress={() =>
+                  this.select({
+                    lat: item.lat,
+                    lng: item.lng,
+                    text: item.name,
+                  })
+                }>
+                {item.name}
+              </Text>
+            )}
+          />
+        </View>
       </View>
     );
   }

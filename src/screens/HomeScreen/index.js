@@ -12,14 +12,9 @@ import {
 } from 'react-native';
 
 import { MapView } from 'expo';
-import isEmpty from 'lodash/isEmpty';
 import RouteSearchForm from '@/components/RouteSearchForm';
-import { notTotallyWhite, trueBlack } from '@/utils/colors';
 
 import { getSearchParameters, getResults } from '@/domains/search/selectors';
-
-import LegFactory from './Legs/LegFactory';
-import Header from './Header';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -29,27 +24,9 @@ class HomeScreen extends React.Component {
   state = {
     loading: false,
     hasSearched: false,
-
-    selected: -1,
-  };
-
-  toggleItinerary = index => () => {
-    const { selected } = this.state;
-
-    if (index === selected) {
-      this.setState({ selected: -1 });
-      return;
-    }
-    this.setState({ selected: index });
-  };
-
-  onItineraryResults = results => {
-    this.setState({ results, hasSearched: true, loading: false });
-    this.props.navigation.navigate('Itinerary', { results });
   };
 
   render() {
-    const { selected } = this.state;
     console.log('props', this.props.searchParameters);
     return (
       <View style={styles.container}>
@@ -81,13 +58,10 @@ class HomeScreen extends React.Component {
   }
 }
 
-export default connect(
-  state => ({
-    searchParameters: getSearchParameters(state),
-    results: getResults(state),
-  }),
-  null
-)(HomeScreen);
+export default connect(state => ({
+  searchParameters: getSearchParameters(state),
+  results: getResults(state),
+}))(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {

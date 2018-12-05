@@ -6,14 +6,14 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 
 import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
-import { LinearGradient, Constants } from 'expo';
+import { LinearGradient, Constants, Location, Permissions } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-import { updateSearchParameters, updateFormValue } from '@/domains/search/actions';
+import { updateSearchParameters, updateFormValue, search } from '@/domains/search/actions';
+import { getSearchParameters, getFormValues } from '@/domains/search/selectors';
 import { white, black, blue, red } from '@/utils/colors';
 
 import SearchLocation from '../SearchLocation';
-import { getSearchParameters, getFormValues } from '../../domains/search/selectors';
 
 class RouteSearchForm extends Component {
   state = {
@@ -21,6 +21,27 @@ class RouteSearchForm extends Component {
     toText: '',
     // remove when ready for production XXX
   };
+
+  async componentDidMount() {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    this.props.updateSearchParameters({
+      from: {
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+        name: 'Mon emplacement',
+      },
+    });
+    this.props.updateFormValue({ fromText: 'Mon emplacement' });
+  }
 
   change = (thing, place) => this.props.updateSearchParameters({ [thing]: place });
   setDate = date => this.props.updateSearchParameters({ date });
@@ -84,9 +105,18 @@ class RouteSearchForm extends Component {
               onInputChange={text => this.props.updateFormValue({ toText: text })}
             />
           </View>
-          <TouchableOpacity onPress={simple ? () => true : this.reverseFromTo}>
-            <View>
-              <MaterialIcons name="swap-vert" size={32} color={simple ? 'transparent' : black} />
+          <TouchableOpacity onPress={simple ? this.props.search : this.reverseFromTo}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+                paddingLeft: 8,
+                paddingRight: 8,
+                justifyContent: 'center',
+              }}>
+              {!simple && <MaterialIcons name="swap-vert" size={32} color={black} />}
+              {simple && <Ionicons name="ios-search" size={26} color={black} />}
             </View>
           </TouchableOpacity>
         </View>
@@ -195,6 +225,7 @@ export default connect(
       {
         updateSearchParameters,
         updateFormValue,
+        search,
       },
       dispatch
     )

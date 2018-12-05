@@ -17,16 +17,16 @@ const initialState = {
     arriveBy: false,
 
     // for dev purposes
-    from: {
-      lat: 47.2128,
-      lng: -1.5625,
-      name: 'Place Graslin',
-    },
-    to: {
-      lat: 47.2077,
-      lng: -1.5369,
-      name: 'v Rue René Viviani',
-    },
+    // from: {
+    //   lat: 47.2128,
+    //   lng: -1.5625,
+    //   name: 'Place Graslin',
+    // },
+    // to: {
+    //   lat: 47.2077,
+    //   lng: -1.5369,
+    //   name: 'v Rue René Viviani',
+    // },
   },
   form: {
     fromText: '',

@@ -9,11 +9,11 @@ import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 
 import { LinearGradient, Constants } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-import { updateSearchParameters } from '@/domains/search/actions';
+import { updateSearchParameters, updateFormValue } from '@/domains/search/actions';
 import { white, black, blue, red } from '@/utils/colors';
 
 import SearchLocation from '../SearchLocation';
-import { getSearchParameters } from '../../domains/search/selectors';
+import { getSearchParameters, getFormValues } from '../../domains/search/selectors';
 
 class RouteSearchForm extends Component {
   state = {
@@ -29,7 +29,7 @@ class RouteSearchForm extends Component {
   openDateOptions = () => this.setState({ dateOptionsOpened: true });
 
   reverseFromTo = () => {
-    const { fromText, toText } = this.state;
+    const { fromText, toText } = this.props.formValues;
     const { from, to } = this.props.searchParameters;
 
     this.props.updateSearchParameters({
@@ -37,68 +37,78 @@ class RouteSearchForm extends Component {
       to: from,
     });
 
-    this.setState({
+    this.props.updateFormValue({
       fromText: toText,
       toText: fromText,
     });
   };
   render() {
-    const { dateOptionsOpened, arriveBy, toText, fromText } = this.state;
+    const { dateOptionsOpened, arriveBy } = this.state;
+    const { simple } = this.props;
+    const { toText, fromText } = this.props.formValues;
 
     return (
       <View style={styles.container}>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <View style={styles.itineraryillustration}>
-            <View style={{ ...styles.dot, borderColor: red }} />
-            <View style={styles.line} />
+            {!simple && (
+              <>
+                <View style={{ ...styles.dot, borderColor: red }} />
+                <View style={styles.line} />
+              </>
+            )}
             <View style={{ ...styles.dot, borderColor: blue }} />
           </View>
           <View style={{ flexGrow: 1 }}>
-            <SearchLocation
-              placeholder="Départ.."
-              onSelect={place => {
-                this.change('from', place);
-                this.setState({ fromText: place.name });
-              }}
-              inputText={fromText}
-              onInputChange={text => this.setState({ fromText: text })}
-            />
-            <View style={{ marginBottom: 8 }} />
+            {!simple && (
+              <>
+                <SearchLocation
+                  placeholder="Départ.."
+                  onSelect={place => {
+                    this.change('from', place);
+                    this.props.updateFormValue({ fromText: place.name });
+                  }}
+                  inputText={fromText}
+                  onInputChange={text => this.props.updateFormValue({ fromText: text })}
+                />
+                <View style={{ marginBottom: 8 }} />
+              </>
+            )}
             <SearchLocation
               placeholder="Où est-ce qu'on va ?"
               onSelect={place => {
                 this.change('to', place);
-                this.setState({ toText: place.name });
+                this.props.updateFormValue({ toText: place.name });
               }}
               inputText={toText}
-              onInputChange={text => this.setState({ toText: text })}
+              onInputChange={text => this.props.updateFormValue({ toText: text })}
             />
           </View>
-          <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <TouchableOpacity onPress={this.reverseFromTo}>
-              <View>
-                <MaterialIcons name="swap-vert" size={32} color={black} />
-              </View>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={simple ? () => true : this.reverseFromTo}>
+            <View>
+              <MaterialIcons name="swap-vert" size={32} color={simple ? 'transparent' : black} />
+            </View>
+          </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={this.openDateOptions}>
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <View style={styles.itineraryillustration}>
-              <Ionicons name="ios-time" size={16} color={black} />
+        {!simple && (
+          <TouchableOpacity onPress={this.openDateOptions}>
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+              <View style={styles.itineraryillustration}>
+                <Ionicons name="ios-time" size={16} color={black} />
+              </View>
+              <View style={{ ...styles.itineraryillustration, flexGrow: 1 }}>
+                <Text>
+                  {arriveBy ? 'Arrivée' : 'Départ'} :{' '}
+                  {moment(this.state.date)
+                    .calendar()
+                    .toLowerCase()}
+                </Text>
+              </View>
             </View>
-            <View style={{ ...styles.itineraryillustration, flexGrow: 1 }}>
-              <Text>
-                {arriveBy ? 'Arrivée' : 'Départ'} :{' '}
-                {moment(this.state.date)
-                  .calendar()
-                  .toLowerCase()}
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        {dateOptionsOpened && (
+          </TouchableOpacity>
+        )}
+        {!simple && dateOptionsOpened && (
           <View>
             <View
               style={{
@@ -138,13 +148,6 @@ class RouteSearchForm extends Component {
             </TouchableOpacity>
           </View>
         )}
-        <TouchableOpacity onPress={this.lookForRoute}>
-          <LinearGradient
-            colors={['#5f6fee', '#5f8eee']}
-            style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
-            <Text style={{ color: white }}>Rechercher</Text>
-          </LinearGradient>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -185,11 +188,13 @@ const styles = StyleSheet.create({
 export default connect(
   state => ({
     searchParameters: getSearchParameters(state),
+    formValues: getFormValues(state),
   }),
   dispatch =>
     bindActionCreators(
       {
         updateSearchParameters,
+        updateFormValue,
       },
       dispatch
     )

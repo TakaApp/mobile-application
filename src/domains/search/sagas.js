@@ -41,7 +41,7 @@ function* searchOnParameterChanges() {
 
 function* onResultsChangePage() {
   yield takeLatest([RECEIVED_RESULTS], function* f() {
-    NavigationService.navigate('Itinerary');
+    NavigationService.navigate('Results');
   });
 }
 

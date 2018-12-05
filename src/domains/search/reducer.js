@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 
-import { UPDATE_SEARCH_PARAMETERS, RECEIVED_RESULTS } from './constants';
+import { UPDATE_SEARCH_PARAMETERS, RECEIVED_RESULTS, UPDATE_FORM_VALUE } from './constants';
 
 const initialState = {
   parameters: {
@@ -28,6 +28,10 @@ const initialState = {
       name: 'v Rue René Viviani',
     },
   },
+  form: {
+    fromText: '',
+    toText: '',
+  },
 };
 
 export const search = handleActions(
@@ -42,6 +46,13 @@ export const search = handleActions(
     [RECEIVED_RESULTS]: (state, action) => ({
       ...state,
       results: action.payload,
+    }),
+    [UPDATE_FORM_VALUE]: (state, action) => ({
+      ...state,
+      form: {
+        ...state.form,
+        ...action.payload,
+      },
     }),
   },
   initialState

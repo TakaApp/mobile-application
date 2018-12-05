@@ -20,8 +20,6 @@ export default class ItineraryScreen extends Component {
           shadowOpacity: 0.8,
           shadowRadius: 8,
           borderRadius: 8,
-          borderBottomRightRadius: 0,
-          borderBottomLeftRadius: 0,
         }}>
         <View style={styles.container}>
           <View

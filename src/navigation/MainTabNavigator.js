@@ -7,9 +7,11 @@ import SettingsScreen from '../screens/SettingsScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
 
 import HomeScreen from '../screens/HomeScreen';
+import ResultsScreen from '../screens/ResultsScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Results: ResultsScreen,
   Itinerary: ItineraryScreen,
 });
 

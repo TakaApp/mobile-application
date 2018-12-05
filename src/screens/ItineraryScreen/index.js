@@ -29,7 +29,8 @@ class ItineraryScreen extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    this.map.fitToSuppliedMarkers(['From', 'To']);
+    // this.map.fitToSuppliedMarkers(['From', 'To']);
+    this.map.fitToElements();
   }
 
   toggleItinerary = index => () => {
@@ -103,14 +104,14 @@ class ItineraryScreen extends React.Component {
           </TouchableOpacity>
           {selected !== -1 && <Header itinerary={results[selected]} isSelected />}
         </View>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.resultContainer}>
           {results.map((result, index) => (
             <View
               key={index}
               style={{
                 marginBottom: 8,
-                paddingLeft: 8,
-                paddingRight: 8,
+                // paddingLeft: 8,
+                // paddingRight: 8,
                 backgroundColor: '#FFF',
               }}>
               {selected !== index && (
@@ -124,6 +125,7 @@ class ItineraryScreen extends React.Component {
                     ref={c => {
                       this.map = c;
                     }}
+                    onLayout={() => this.map.fitToElements()}
                     style={{ flexGrow: 1 }}
                     initialRegion={{
                       latitude: 47.209136,
@@ -168,7 +170,9 @@ class ItineraryScreen extends React.Component {
                   </MapView>
                 </View>
               )}
-              {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
+              {selected === index && (
+                <View style={styles.legs}>{result.legs.map(LegFactory.build)}</View>
+              )}
             </View>
           ))}
         </ScrollView>
@@ -187,9 +191,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: notTotallyWhite,
   },
+  resultContainer: {
+    marginTop: 8,
+  },
   map: {
     flexGrow: 1,
-    height: 256,
+    height: 128,
   },
   header: {
     backgroundColor: black,
@@ -199,9 +206,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    shadowColor: '#dddddd',
+    shadowColor: '#888888',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
+    shadowOpacity: 1,
     shadowRadius: 2,
   },
   loading: {
@@ -210,5 +217,13 @@ const styles = StyleSheet.create({
   goBack: {
     paddingLeft: 16,
     paddingRight: 16,
+  },
+  legs: {
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    shadowColor: '#888888',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
   },
 });

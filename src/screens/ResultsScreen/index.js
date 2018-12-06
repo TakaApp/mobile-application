@@ -1,12 +1,19 @@
 import React from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 import { connect } from 'react-redux';
 import RouteSearchForm from '@/components/RouteSearchForm';
 
 import { Constants } from 'expo';
 
 import { notTotallyWhite, black } from '@/utils/colors';
-import { getResults } from '@/domains/search/selectors';
+import { getResults, getIsLoading } from '@/domains/search/selectors';
 import NavigationService from '@/services/Navigation';
 
 import Header from './Header';
@@ -17,27 +24,40 @@ class ResultsScreen extends React.Component {
   };
 
   render() {
-    const { results } = this.props;
+    const { results, loading } = this.props;
 
     return (
       <View style={styles.container}>
-        <RouteSearchForm />
+        <View style={{ zIndex: 99 }}>
+          <RouteSearchForm />
+        </View>
         <ScrollView style={styles.resultContainer}>
-          {results.map((result, index) => (
-            <View
-              key={index}
-              style={{
-                marginBottom: 8,
-                paddingLeft: 8,
-                paddingRight: 8,
-                backgroundColor: '#FFF',
-              }}>
-              <TouchableOpacity
-                onPress={() => NavigationService.navigate('Itinerary', { selected: index })}>
-                <Header itinerary={result} />
-              </TouchableOpacity>
+          {results.length > 0 &&
+            results.map((result, index) => (
+              <View
+                key={index}
+                style={{
+                  marginBottom: 8,
+                  paddingLeft: 8,
+                  paddingRight: 8,
+                  backgroundColor: '#FFF',
+                }}>
+                <TouchableOpacity
+                  onPress={() => NavigationService.navigate('Itinerary', { selected: index })}>
+                  <Header itinerary={result} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          {results.length === 0 && (
+            <View style={{ display: 'flex', alignContent: 'center' }}>
+              <Text style={{ textAlign: 'center' }}>Aucun résultat (ಥ﹏ಥ)</Text>
             </View>
-          ))}
+          )}
+          {loading && (
+            <View style={styles.loading}>
+              <ActivityIndicator />
+            </View>
+          )}
         </ScrollView>
       </View>
     );
@@ -46,6 +66,7 @@ class ResultsScreen extends React.Component {
 
 export default connect(state => ({
   results: getResults(state),
+  loading: getIsLoading(state),
 }))(ResultsScreen);
 
 const styles = StyleSheet.create({
@@ -55,6 +76,12 @@ const styles = StyleSheet.create({
   },
   resultContainer: {
     marginTop: 8,
+    zIndex: 0,
+  },
+  loading: {
+    marginTop: 32,
+    display: 'flex',
+    alignContent: 'center',
   },
   map: {
     flexGrow: 1,
@@ -72,9 +99,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 2,
-  },
-  loading: {
-    marginBottom: 16,
   },
   goBack: {
     paddingLeft: 16,

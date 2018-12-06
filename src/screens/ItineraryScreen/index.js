@@ -29,7 +29,7 @@ const buildPolyLines = (itinerary, resultId = 0) => {
       // outline
       {
         id: `${leg.routeId}${index}${resultId}-outline`,
-        weight: 10,
+        width: 10,
         color: '#424242',
         dashArray,
         latlngs: latlngs.map(ll => ({ latitude: ll[0], longitude: ll[1] })),
@@ -38,7 +38,7 @@ const buildPolyLines = (itinerary, resultId = 0) => {
       // main polyline
       {
         id: `${leg.routeId}${index}${resultId}`,
-        weight: 9,
+        width: 9,
         color: isActive ? color : '#cccccc',
         dashArray,
         latlngs: latlngs.map(ll => ({ latitude: ll[0], longitude: ll[1] })),
@@ -103,7 +103,7 @@ class ItineraryScreen extends React.Component {
                         <Polyline
                           key={step.id}
                           coordinates={step.latlngs}
-                          strokeWidth={4}
+                          strokeWidth={step.width}
                           strokeColor={step.color}
                           lineDashPattern={step.dashArray}
                         />

@@ -2,19 +2,14 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { Marker } from 'react-native-maps';
 
 import { MapView } from 'expo';
 import RouteSearchForm from '@/components/RouteSearchForm';
 
-import { getSearchParameters, getResults } from '@/domains/search/selectors';
+import { getSearchParameters, getResults, getIsLoading } from '@/domains/search/selectors';
+import { blue } from '@/utils/colors';
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -27,7 +22,7 @@ class HomeScreen extends React.Component {
   };
 
   render() {
-    console.log('props', this.props.searchParameters);
+    const { loading, searchParameters } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.map}>
@@ -42,13 +37,24 @@ class HomeScreen extends React.Component {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            showsUserLocation
-          />
+            showsUserLocation>
+            {searchParameters.to && (
+              <Marker
+                identifier="To"
+                flat
+                pinColor={blue}
+                coordinate={{
+                  latitude: searchParameters.to.lat,
+                  longitude: searchParameters.to.lng,
+                }}
+              />
+            )}
+          </MapView>
         </View>
         <View style={{ zIndex: 2 }}>
           <RouteSearchForm simple />
         </View>
-        {this.state.loading && (
+        {loading && (
           <View style={styles.loading}>
             <ActivityIndicator />
           </View>
@@ -61,6 +67,7 @@ class HomeScreen extends React.Component {
 export default connect(state => ({
   searchParameters: getSearchParameters(state),
   results: getResults(state),
+  loading: getIsLoading(state),
 }))(HomeScreen);
 
 const styles = StyleSheet.create({
@@ -79,6 +86,9 @@ const styles = StyleSheet.create({
     right: 0,
   },
   loading: {
-    marginBottom: 16,
+    marginTop: 32,
+    position: 'absolute',
+    top: '49%',
+    left: '48%',
   },
 });

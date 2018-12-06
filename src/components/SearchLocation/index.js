@@ -6,8 +6,6 @@ import { Location, Permissions } from 'expo';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { black } from '@/utils/colors';
-
 // SearchLocation is a component connected to Taka API
 // which allows to search a place and select it
 class SearchLocation extends Component {
@@ -81,9 +79,9 @@ class SearchLocation extends Component {
         </View>
 
         {/* suggestions */}
-        <View style={{ position: 'absolute', top: 32 }}>
+        <View style={{ position: 'absolute', top: 32, zIndex: 999 }}>
           <FlatList
-            keyExtractor={item => `${item.name}${item.lat}`}
+            keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
             data={this.state.data}
             renderItem={({ item }) => (
               <Text
@@ -121,6 +119,8 @@ SearchLocation.propTypes = {
 const styles = StyleSheet.create({
   item: {
     padding: 16,
+    backgroundColor: '#FFF',
+    zIndex: 10,
   },
   input: {
     height: 40,

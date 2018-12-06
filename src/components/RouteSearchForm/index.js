@@ -17,18 +17,13 @@ import SearchLocation from '../SearchLocation';
 
 class RouteSearchForm extends Component {
   state = {
-    fromText: '',
-    toText: '',
-    // remove when ready for production XXX
+    dateOptionsOpened: false,
   };
 
   async componentDidMount() {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied',
-      });
       return;
     }
 
@@ -47,7 +42,7 @@ class RouteSearchForm extends Component {
   setDate = date => this.props.updateSearchParameters({ date });
   setArriveBy = arriveBy => () => this.props.updateSearchParameters({ arriveBy });
 
-  openDateOptions = () => this.setState({ dateOptionsOpened: true });
+  toggleDateOptions = () => this.setState({ dateOptionsOpened: !this.state.dateOptionsOpened });
 
   reverseFromTo = () => {
     const { fromText, toText } = this.props.formValues;
@@ -64,120 +59,119 @@ class RouteSearchForm extends Component {
     });
   };
   render() {
-    const { dateOptionsOpened, arriveBy } = this.state;
-    const { simple } = this.props;
-    const { toText, fromText } = this.props.formValues;
+    const { dateOptionsOpened } = this.state;
+    const { simple, formValues, searchParameters } = this.props;
+    const { toText, fromText } = formValues;
+    const { arriveBy, date } = searchParameters;
 
     return (
       <View style={styles.container}>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <View style={styles.itineraryillustration}>
-            {!simple && (
-              <>
-                <View style={{ ...styles.dot, borderColor: red }} />
-                <View style={styles.line} />
-              </>
-            )}
-            <View style={{ ...styles.dot, borderColor: blue }} />
-          </View>
-          <View style={{ flexGrow: 1 }}>
-            {!simple && (
-              <>
-                <SearchLocation
-                  placeholder="Départ.."
-                  onSelect={place => {
-                    this.change('from', place);
-                    this.props.updateFormValue({ fromText: place.name });
-                  }}
-                  inputText={fromText}
-                  onInputChange={text => this.props.updateFormValue({ fromText: text })}
-                />
-                <View style={{ marginBottom: 8 }} />
-              </>
-            )}
-            <SearchLocation
-              placeholder="Où est-ce qu'on va ?"
-              onSelect={place => {
-                this.change('to', place);
-                this.props.updateFormValue({ toText: place.name });
-              }}
-              inputText={toText}
-              onInputChange={text => this.props.updateFormValue({ toText: text })}
-            />
-          </View>
-          <TouchableOpacity onPress={simple ? this.props.search : this.reverseFromTo}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                flexGrow: 1,
-                paddingLeft: 8,
-                paddingRight: 8,
-                justifyContent: 'center',
-              }}>
-              {!simple && <MaterialIcons name="swap-vert" size={32} color={black} />}
-              {simple && <Ionicons name="ios-search" size={26} color={black} />}
+        <View style={{ zIndex: 99 }}>
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <View style={styles.itineraryillustration}>
+              {!simple && (
+                <>
+                  <View style={{ ...styles.dot, borderColor: red }} />
+                  <View style={styles.line} />
+                </>
+              )}
+              <View style={{ ...styles.dot, borderColor: blue }} />
             </View>
-          </TouchableOpacity>
-        </View>
-
-        {!simple && (
-          <TouchableOpacity onPress={this.openDateOptions}>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <View style={styles.itineraryillustration}>
-                <Ionicons name="ios-time" size={16} color={black} />
-              </View>
-              <View style={{ ...styles.itineraryillustration, flexGrow: 1 }}>
-                <Text>
-                  {arriveBy ? 'Arrivée' : 'Départ'} :{' '}
-                  {moment(this.state.date)
-                    .calendar()
-                    .toLowerCase()}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-        {!simple && dateOptionsOpened && (
-          <View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Button
-                onPress={() => this.setState({ date: new Date(), arriveBy: false })}
-                title="Maintenant"
+            <View style={{ flexGrow: 1 }}>
+              {!simple && (
+                <>
+                  <SearchLocation
+                    placeholder="Départ.."
+                    onSelect={place => {
+                      this.change('from', place);
+                      this.props.updateFormValue({ fromText: place.name });
+                    }}
+                    inputText={fromText}
+                    onInputChange={text => this.props.updateFormValue({ fromText: text })}
+                  />
+                  <View style={{ marginBottom: 8 }} />
+                </>
+              )}
+              <SearchLocation
+                placeholder="Où est-ce qu'on va ?"
+                onSelect={place => {
+                  this.change('to', place);
+                  this.props.updateFormValue({ toText: place.name });
+                }}
+                inputText={toText}
+                onInputChange={text => this.props.updateFormValue({ toText: text })}
               />
-              <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <TouchableOpacity onPress={this.setArriveBy(false)}>
-                  <LinearGradient
-                    colors={arriveBy ? [] : ['#5f6fee', '#5f8eee']}
-                    style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
-                    <Text style={{ color: arriveBy ? black : white }}>Partir à</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.setArriveBy(true)}>
-                  <LinearGradient
-                    colors={arriveBy ? ['#5f6fee', '#5f8eee'] : []}
-                    style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
-                    <Text style={{ color: arriveBy ? white : black }}>Arriver à</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
             </View>
-            <DatePickerIOS date={this.state.date} onDateChange={this.setDate} />
-            <TouchableOpacity onPress={this.lookForRoute}>
-              <LinearGradient
-                colors={['#5f6fee', '#5f8eee']}
-                style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
-                <Text style={{ color: white }}>Rechercher</Text>
-              </LinearGradient>
+            <TouchableOpacity onPress={simple ? this.props.search : this.reverseFromTo}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                  paddingLeft: 8,
+                  paddingRight: 8,
+                  justifyContent: 'center',
+                }}>
+                {!simple && <MaterialIcons name="swap-vert" size={32} color={black} />}
+                {simple && <Ionicons name="ios-search" size={26} color="transparent" />}
+              </View>
             </TouchableOpacity>
           </View>
-        )}
+        </View>
+        <View style={{ zIndex: 0 }}>
+          {!simple && (
+            <TouchableOpacity onPress={this.toggleDateOptions}>
+              <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <View style={styles.itineraryillustration}>
+                  <Ionicons name="ios-time" size={16} color={black} />
+                </View>
+                <View style={{ ...styles.itineraryillustration, flexGrow: 1 }}>
+                  <Text>
+                    {arriveBy ? 'Arrivée' : 'Départ'} :{' '}
+                    {moment(date)
+                      .calendar()
+                      .toLowerCase()}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          {dateOptionsOpened && (
+            <View>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Button
+                  onPress={() =>
+                    this.props.updateSearchParameters({ date: new Date(), arriveBy: false })
+                  }
+                  title="Maintenant"
+                />
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                  <TouchableOpacity onPress={this.setArriveBy(false)}>
+                    <LinearGradient
+                      colors={arriveBy ? [] : ['#5f6fee', '#5f8eee']}
+                      style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                      <Text style={{ color: arriveBy ? black : white }}>Partir à</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={this.setArriveBy(true)}>
+                    <LinearGradient
+                      colors={arriveBy ? ['#5f6fee', '#5f8eee'] : []}
+                      style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                      <Text style={{ color: arriveBy ? white : black }}>Arriver à</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <DatePickerIOS date={date} onDateChange={this.setDate} />
+            </View>
+          )}
+        </View>
       </View>
     );
   }

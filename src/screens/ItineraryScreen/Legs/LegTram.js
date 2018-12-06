@@ -13,8 +13,6 @@ export default class TramLeg extends React.Component {
   render() {
     const { leg, index } = this.props;
 
-    console.log('leg', leg);
-
     return (
       <View style={LegStyle.container}>
         <LegIllustration leg={leg} index={index} />

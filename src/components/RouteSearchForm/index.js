@@ -79,7 +79,7 @@ class RouteSearchForm extends Component {
             </View>
             <View style={{ flexGrow: 1 }}>
               {!simple && (
-                <>
+                <View style={{ zIndex: 99 }}>
                   <SearchLocation
                     placeholder="Départ.."
                     onSelect={place => {
@@ -90,7 +90,7 @@ class RouteSearchForm extends Component {
                     onInputChange={text => this.props.updateFormValue({ fromText: text })}
                   />
                   <View style={{ marginBottom: 8 }} />
-                </>
+                </View>
               )}
               <SearchLocation
                 placeholder="Où est-ce qu'on va ?"

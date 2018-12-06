@@ -14,7 +14,6 @@ function* searchOnParameterChanges() {
 
     let { status } = yield Permissions.askAsync(Permissions.LOCATION);
 
-    console.log('stats', status);
     // invalid parameters
     if ((!sp.from || !sp.to) && status === 'granted') return;
 

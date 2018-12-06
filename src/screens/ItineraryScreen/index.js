@@ -23,8 +23,6 @@ const buildPolyLines = (itinerary, resultId = 0) => {
     const color = leg.mode === 'WALK' ? '#3367D6' : leg.routeColor ? `#${leg.routeColor}` : 'green';
     const dashArray = leg.mode === 'WALK' ? [1, 12] : null;
 
-    console.log('latlng', latlngs);
-
     return [
       // outline
       {
@@ -75,7 +73,7 @@ class ItineraryScreen extends React.Component {
             <Ionicons name="ios-arrow-back" size={32} color={black} />
           </TouchableOpacity>
         </View>
-        <ScrollView style={styles.resultContainer}>
+        <View>
           <View
             style={{
               // paddingLeft: 8,
@@ -131,9 +129,11 @@ class ItineraryScreen extends React.Component {
                 />
               </MapView>
             </View>
-            <Header itinerary={itinerary} isSelected />
-            <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
           </View>
+          <Header itinerary={itinerary} isSelected />
+        </View>
+        <ScrollView>
+          <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
         </ScrollView>
       </View>
     );
@@ -150,9 +150,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: notTotallyWhite,
-  },
-  resultContainer: {
-    marginTop: 8,
   },
   map: {
     flexGrow: 1,

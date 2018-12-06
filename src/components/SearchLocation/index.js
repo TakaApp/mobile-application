@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import T from 'prop-types';
 
-import { StyleSheet, View, Text, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { Location, Permissions } from 'expo';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +25,8 @@ class SearchLocation extends Component {
     //  type: string
     // }
     data: [],
+    hasSearched: false,
+    loading: false,
   };
 
   getLocationAsync = async () => {
@@ -40,11 +50,12 @@ class SearchLocation extends Component {
 
   // called every time the user changes the input
   onChangeText = async inputText => {
+    this.setState({ loading: true });
     this.props.onInputChange(inputText);
     // fetch the data from the API and update our state with it
     const response = await fetch(`https://api.nantes.cool/search-location/${inputText}`);
     const data = await response.json();
-    this.setState({ data });
+    this.setState({ data: data || [], hasSearched: true, loading: false });
   };
 
   // called when the user selects an option
@@ -55,10 +66,12 @@ class SearchLocation extends Component {
     // update the input text with the place name to make sure the user
     // understands that his choice is validated and clear the data from the
     // API which is no longer used
-    this.setState({ inputText: text, data: [] });
+    this.setState({ inputText: text, data: [], hasSearched: false });
   };
 
   render() {
+    const { loading, hasSearched } = this.state;
+
     return (
       <View>
         {/* user input */}
@@ -71,6 +84,13 @@ class SearchLocation extends Component {
             onFocus={this.props.onFocus}
           />
 
+          {loading && (
+            <View style={{ position: 'absolute', right: 42, top: 10.5 }}>
+              <TouchableOpacity onPress={this.getLocationAsync}>
+                <ActivityIndicator />
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={{ position: 'absolute', right: 8, top: 8 }}>
             <TouchableOpacity onPress={this.getLocationAsync}>
               <MaterialIcons name="my-location" size={24} />
@@ -80,7 +100,15 @@ class SearchLocation extends Component {
 
         {/* suggestions */}
         <View style={{ position: 'absolute', top: 32, zIndex: 999 }}>
+          {hasSearched && this.state.data.length === 0 && (
+            <FlatList
+              keyExtractor={item => item}
+              data={['foo']}
+              renderItem={() => <Text style={styles.item}>Aucun résultat (╯°□°）╯︵ ┻━┻</Text>}
+            />
+          )}
           <FlatList
+            keyboardShouldPersistTaps="always"
             keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
             data={this.state.data}
             renderItem={({ item }) => (

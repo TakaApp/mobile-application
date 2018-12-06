@@ -13,7 +13,7 @@ export default class ItineraryScreen extends Component {
 
     return (
       <LinearGradient
-        colors={isSelected ? ['#B0F3F1', '#FFCFDF'] : ['#FFF', '#FFF']}
+        colors={isSelected ? ['#F5E3E6', '#D9E4F5'] : ['#FFF', '#FFF']}
         style={{
           shadowColor: '#cecece',
           shadowOffset: { width: 0, height: 2 },

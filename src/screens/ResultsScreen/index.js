@@ -33,6 +33,7 @@ class ResultsScreen extends React.Component {
         </View>
         <ScrollView style={styles.resultContainer}>
           {results.length > 0 &&
+            !loading &&
             results.map((result, index) => (
               <View
                 key={index}
@@ -48,7 +49,7 @@ class ResultsScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             ))}
-          {results.length === 0 && (
+          {results.length === 0 && !loading && (
             <View style={{ display: 'flex', alignContent: 'center' }}>
               <Text style={{ textAlign: 'center' }}>Aucun résultat (ಥ﹏ಥ)</Text>
             </View>

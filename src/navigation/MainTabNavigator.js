@@ -3,11 +3,13 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import SettingsScreen from '../screens/SettingsScreen';
-import ItineraryScreen from '../screens/ItineraryScreen';
 
-import HomeScreen from '../screens/HomeScreen';
-import ResultsScreen from '../screens/ResultsScreen';
+import SettingsScreen from '@/screens/SettingsScreen';
+import ItineraryScreen from '@/screens/ItineraryScreen';
+
+import HomeScreen from '@/screens/HomeScreen';
+import ResultsScreen from '@/screens/ResultsScreen';
+import InfoScreen from '@/screens/InfoScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -36,7 +38,21 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+const InfoScreenStack = createStackNavigator({
+  AppInfo: InfoScreen,
+});
+
+InfoScreenStack.navigationOptions = {
+  tabBarLabel: 'Info',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-information'}
+    />
+  ),
+};
+
 export default createBottomTabNavigator({
   HomeStack,
-  // SettingsStack,
+  InfoScreenStack,
 });

@@ -52,7 +52,7 @@ class HomeScreen extends React.Component {
           </MapView>
         </View>
         <View style={{ zIndex: 2 }}>
-          <RouteSearchForm simple />
+          <RouteSearchForm simple setFromToCurrentPosition />
         </View>
         {loading && (
           <View style={styles.loading}>

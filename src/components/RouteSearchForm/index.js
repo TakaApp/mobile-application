@@ -28,13 +28,16 @@ class RouteSearchForm extends Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    this.props.updateSearchParameters({
-      from: {
-        lat: location.coords.latitude,
-        lng: location.coords.longitude,
-        name: 'Mon emplacement',
-      },
-    });
+    if (this.props.setFromToCurrentPosition) {
+      this.props.updateSearchParameters({
+        from: {
+          lat: location.coords.latitude,
+          lng: location.coords.longitude,
+          name: 'Mon emplacement',
+        },
+      });
+    }
+
     this.props.updateFormValue({ fromText: 'Mon emplacement' });
   }
 
@@ -96,7 +99,10 @@ class RouteSearchForm extends Component {
                 placeholder="Où est-ce qu'on va ?"
                 onSelect={place => {
                   this.change('to', place);
-                  this.props.updateFormValue({ toText: place.name });
+                  this.props.updateFormValue({
+                    toText: place.name,
+                    changeScreen: this.props.simple,
+                  });
                 }}
                 inputText={toText}
                 onInputChange={text => this.props.updateFormValue({ toText: text })}

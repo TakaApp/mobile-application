@@ -18,7 +18,6 @@ function* searchOnParameterChanges() {
 
     yield put({ type: SET_IS_LOADING, payload: true });
     try {
-      console.log('calling api');
       const response = yield fetch('https://api.nantes.cool/trip', {
         method: 'POST',
         headers: {
@@ -41,7 +40,7 @@ function* searchOnParameterChanges() {
     } catch (e) {
       yield put({ type: SET_IS_LOADING, payload: false });
       yield put({ type: RECEIVED_RESULTS, payload: [] });
-      yield put({ type: 'ERROR', payload: e });
+      yield put({ type: 'ERROR', payload: `Le serveur a quelques problèmes... (ง'̀-'́)ง` });
     }
   });
 }

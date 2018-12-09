@@ -8,6 +8,7 @@ import { ScreenOrientation, AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
+import Error from '@/components/Error';
 
 moment.locale('fr');
 
@@ -33,7 +34,7 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-          <View style={styles.statusBar} />
+          <Error />
           <AppNavigator />
         </View>
       );
@@ -71,9 +72,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'transparent',
-  },
-  statusBar: {
     backgroundColor: 'transparent',
   },
 });

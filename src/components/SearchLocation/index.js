@@ -10,9 +10,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import { Location, Permissions } from 'expo';
+import { Location } from 'expo';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import { MaterialIcons } from '@expo/vector-icons';
+import { putError } from '@/domains/error/actions';
 
 // SearchLocation is a component connected to Taka API
 // which allows to search a place and select it
@@ -30,15 +34,6 @@ class SearchLocation extends Component {
   };
 
   getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied',
-      });
-      return;
-    }
-
     let location = await Location.getCurrentPositionAsync({});
 
     this.props.onSelect({
@@ -52,10 +47,16 @@ class SearchLocation extends Component {
   onChangeText = async inputText => {
     this.setState({ loading: true });
     this.props.onInputChange(inputText);
+
     // fetch the data from the API and update our state with it
-    const response = await fetch(`https://api.nantes.cool/search-location/${inputText}`);
-    const data = await response.json();
-    this.setState({ data: data || [], hasSearched: true, loading: false });
+    try {
+      const response = await fetch(`https://api.nantes.cool/search-location/${inputText}`);
+      const data = await response.json();
+      this.setState({ data: data || [], hasSearched: true, loading: false });
+    } catch (e) {
+      this.props.putError(`Le serveur a quelques problèmes... (ง'̀-'́)ง`);
+      this.setState({ loading: false });
+    }
   };
 
   // called when the user selects an option
@@ -164,4 +165,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchLocation;
+export default connect(
+  null,
+  dispatch =>
+    bindActionCreators(
+      {
+        putError,
+      },
+      dispatch
+    )
+)(SearchLocation);

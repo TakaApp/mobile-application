@@ -29,7 +29,7 @@ export default class ItineraryScreen extends Component {
               alignContent: 'center',
               marginRight: 8,
             }}>
-            <Text style={textStyle.black}>Depart à</Text>
+            <Text style={textStyle.black}>Départ à</Text>
             <Text style={styles.departureTime}>{hour(i.startTime)}</Text>
           </View>
           <View style={{ flexGrow: 1 }}>

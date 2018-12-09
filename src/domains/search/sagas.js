@@ -1,6 +1,5 @@
 import moment from 'moment';
 import { Permissions } from 'expo';
-import { Vibration } from 'react-native';
 
 import { select, put, takeLatest } from 'redux-saga/effects';
 
@@ -39,7 +38,6 @@ function* searchOnParameterChanges() {
 
       // on force l'addresse dans le formulaire
       yield put({ type: RECEIVED_RESULTS, payload: results });
-      Vibration.vibrate();
     } catch (e) {
       yield put({ type: SET_IS_LOADING, payload: false });
       yield put({ type: RECEIVED_RESULTS, payload: [] });

@@ -71,7 +71,7 @@ class SearchLocation extends Component {
   };
 
   render() {
-    const { loading, hasSearched } = this.state;
+    const { loading, hasSearched, data } = this.state;
 
     return (
       <View>
@@ -100,32 +100,37 @@ class SearchLocation extends Component {
         </View>
 
         {/* suggestions */}
-        <View style={{ position: 'absolute', top: 32, zIndex: 999 }}>
-          {hasSearched && this.state.data.length === 0 && (
+        <View style={{ position: 'absolute', top: 32 }}>
+          {hasSearched && data.length === 0 && (
             <FlatList
               keyExtractor={item => item}
               data={['foo']}
               renderItem={() => <Text style={styles.item}>Aucun résultat (╯°□°）╯︵ ┻━┻</Text>}
             />
           )}
-          <FlatList
-            keyboardShouldPersistTaps="always"
-            keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
-            data={this.state.data}
-            renderItem={({ item }) => (
-              <Text
-                style={styles.item}
-                onPress={() =>
-                  this.select({
-                    lat: item.lat,
-                    lng: item.lng,
-                    text: item.name,
-                  })
-                }>
-                {item.name}
-              </Text>
-            )}
-          />
+          {data.length > 0 && (
+            <FlatList
+              keyboardShouldPersistTaps="always"
+              keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
+              data={data}
+              style={{ backgroundColor: '#FFF' }}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={{
+                    zIndex: 9,
+                  }}
+                  onPress={() =>
+                    this.select({
+                      lat: item.lat,
+                      lng: item.lng,
+                      text: item.name,
+                    })
+                  }>
+                  <Text style={styles.item}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          )}
         </View>
       </View>
     );

@@ -13,15 +13,13 @@ export default class ItineraryScreen extends Component {
 
     return (
       <LinearGradient
-        colors={isSelected ? ['#F5E3E6', '#D9E4F5'] : ['#FFF', '#FFF']}
+        colors={isSelected ? ['#B0F3F1', '#FFCFDF'] : ['#FFF', '#FFF']}
         style={{
           shadowColor: '#cecece',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.8,
           shadowRadius: 8,
           borderRadius: 8,
-          borderBottomRightRadius: 0,
-          borderBottomLeftRadius: 0,
         }}>
         <View style={styles.container}>
           <View
@@ -29,7 +27,7 @@ export default class ItineraryScreen extends Component {
               alignContent: 'center',
               marginRight: 8,
             }}>
-            <Text style={textStyle.black}>Départ à</Text>
+            <Text style={textStyle.black}>Depart à</Text>
             <Text style={styles.departureTime}>{hour(i.startTime)}</Text>
           </View>
           <View style={{ flexGrow: 1 }}>

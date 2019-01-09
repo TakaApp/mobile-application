@@ -26,7 +26,7 @@ const modeToDisplay = type => {
 // with its different legs
 class LegType extends Component {
   render() {
-    const { leg: l } = this.props;
+    const { leg: l, compact } = this.props;
 
     return (
       <View
@@ -39,7 +39,7 @@ class LegType extends Component {
         }}>
         {modeToDisplay(l.mode)}
 
-        {l.mode !== 'WALK' && (
+        {l.mode !== 'WALK' && !compact && (
           <Text
             style={{
               backgroundColor: `#${l.routeColor}`,
@@ -52,7 +52,7 @@ class LegType extends Component {
             {l.route}
           </Text>
         )}
-        {l.mode === 'WALK' && (
+        {l.mode === 'WALK' && !compact && (
           <Text
             style={{
               textAlign: 'left',
@@ -108,6 +108,12 @@ LegType.propTypes = {
     // ex: 4, eq Line 4
     route: T.string.isRequired,
   }),
+
+  compact: T.bool.isRequired,
+};
+
+LegType.defaultProps = {
+  compact: false,
 };
 
 export default LegType;

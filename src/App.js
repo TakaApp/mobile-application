@@ -4,12 +4,11 @@ import 'moment/locale/fr';
 import moment from 'moment';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { ScreenOrientation, AppLoading, Asset, Font, Constants } from 'expo';
+import { ScreenOrientation, AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
-import { notTotallyWhite } from '@/utils/colors';
-
 import AppNavigator from './navigation/AppNavigator';
+import Error from '@/components/Error';
 
 moment.locale('fr');
 
@@ -35,7 +34,7 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
-          <View style={styles.statusBar} />
+          <Error />
           <AppNavigator />
         </View>
       );
@@ -54,7 +53,7 @@ export default class App extends React.Component {
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-        'comfortaa': require('./assets/fonts/Comfortaa-Regular.ttf'),
+        comfortaa: require('./assets/fonts/Comfortaa-Regular.ttf'),
       }),
     ]);
   };
@@ -73,10 +72,6 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  statusBar: {
-    height: Constants.statusBarHeight,
-    backgroundColor: notTotallyWhite,
+    backgroundColor: 'transparent',
   },
 });

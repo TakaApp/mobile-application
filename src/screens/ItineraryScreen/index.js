@@ -1,107 +1,196 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
+
+import polyUtil from 'polyline-encoded';
+
+import { Marker, Polyline } from 'react-native-maps';
+import { Constants, MapView } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
-import RouteSearchForm from '@/components/RouteSearchForm';
-import { notTotallyWhite, trueBlack } from '@/utils/colors';
+import { notTotallyWhite, black, red, blue } from '@/utils/colors';
+import { getResults, getSearchParameters } from '@/domains/search/selectors';
 
 import LegFactory from './Legs/LegFactory';
 import Header from './Header';
 
-export default class HomeScreen extends React.Component {
+const buildPolyLines = (itinerary, resultId = 0) => {
+  const trips = [];
+  const isActive = true;
+  const combinedPolyLines = itinerary.legs.map((leg, index) => {
+    const latlngs = polyUtil.decode(leg.legGeometry.points);
+    // eslint-disable-next-line
+    const color = leg.mode === 'WALK' ? '#3367D6' : leg.routeColor ? `#${leg.routeColor}` : 'green';
+    const dashArray = leg.mode === 'WALK' ? [1, 12] : null;
+
+    return [
+      // outline
+      {
+        id: `${leg.routeId}${index}${resultId}-outline`,
+        width: 10,
+        color: '#424242',
+        dashArray,
+        latlngs: latlngs.map(ll => ({ latitude: ll[0], longitude: ll[1] })),
+        resultId,
+      },
+      // main polyline
+      {
+        id: `${leg.routeId}${index}${resultId}`,
+        width: 9,
+        color: isActive ? color : '#cccccc',
+        dashArray,
+        latlngs: latlngs.map(ll => ({ latitude: ll[0], longitude: ll[1] })),
+        resultId,
+      },
+    ];
+  });
+  combinedPolyLines.forEach(polyLines => {
+    trips.push({
+      active: isActive,
+      polyLines,
+    });
+  });
+
+  return trips.sort(i => i.active);
+};
+
+class ItineraryScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  state = {
-    loading: false,
-    results: [],
-    hasSearched: false,
-
-    selected: -1,
-  };
-
-  toggleItinerary = index => () => {
-    const { selected } = this.state;
-
-    if (index === selected) {
-      this.setState({ selected: -1 });
-      return;
-    }
-    this.setState({ selected: index });
-  };
-
-  onItineraryResults = results => {
-    this.setState({ results, hasSearched: true, loading: false });
-  };
+  componentDidUpdate(prevProps) {
+    this.map.fitToElements();
+  }
 
   render() {
-    const { selected } = this.state;
+    const { searchParameters, itinerary, trips } = this.props;
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerMainText}>Recherche</Text>
-          <Ionicons name="ios-search" size={32} color={trueBlack} />
+        <View style={styles.backButton}>
+          <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <Ionicons name="ios-arrow-back" size={32} color={black} />
+          </TouchableOpacity>
         </View>
-        <RouteSearchForm
-          onResults={this.onItineraryResults}
-          onSearch={() => this.setState({ loading: true })}
-        />
-        {this.state.loading && (
-          <View style={styles.loading}>
-            <ActivityIndicator />
-          </View>
-        )}
-        <ScrollView style={styles.container}>
-          {/* itineraries */}
-          {this.state.hasSearched && (
-            <View>
-              {this.state.results.map((result, index) => (
-                <View
-                  key={index}
-                  style={{
-                    marginBottom: 8,
-                    paddingLeft: 8,
-                    paddingRight: 8,
-                    backgroundColor: '#FFF',
-                  }}>
-                  <TouchableOpacity onPress={this.toggleItinerary(index)}>
-                    <Header itinerary={result} isSelected={selected === index} />
-                  </TouchableOpacity>
-                  {selected === index && <View>{result.legs.map(LegFactory.build)}</View>}
-                </View>
-              ))}
+        <View>
+          <View
+            style={{
+              // paddingLeft: 8,
+              // paddingRight: 8,
+              backgroundColor: '#FFF',
+            }}>
+            <View style={styles.map}>
+              <MapView
+                ref={c => {
+                  this.map = c;
+                }}
+                onLayout={() => this.map.fitToElements()}
+                style={{ flexGrow: 1 }}
+                initialRegion={{
+                  latitude: 47.209136,
+                  longitude: -1.547149,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+                showsUserLocation>
+                {trips.map((trip, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      {trip.polyLines.map(step => (
+                        <Polyline
+                          key={step.id}
+                          coordinates={step.latlngs}
+                          strokeWidth={step.width}
+                          strokeColor={step.color}
+                          lineDashPattern={step.dashArray}
+                        />
+                      ))}
+                    </React.Fragment>
+                  );
+                })}
+                <Marker
+                  identifier="From"
+                  flat
+                  pinColor={red}
+                  coordinate={{
+                    latitude: searchParameters.from.lat,
+                    longitude: searchParameters.from.lng,
+                  }}
+                />
+                <Marker
+                  identifier="To"
+                  flat
+                  pinColor={blue}
+                  coordinate={{
+                    latitude: searchParameters.to.lat,
+                    longitude: searchParameters.to.lng,
+                  }}
+                />
+              </MapView>
             </View>
-          )}
+          </View>
+          <Header itinerary={itinerary} isSelected />
+        </View>
+        <ScrollView>
+          <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
         </ScrollView>
       </View>
     );
   }
 }
 
+export default connect((state, { navigation }) => ({
+  itinerary: getResults(state)[navigation.getParam('selected')],
+  searchParameters: getSearchParameters(state),
+  trips: buildPolyLines(getResults(state)[navigation.getParam('selected')]),
+}))(ItineraryScreen);
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fcfcfc',
+    backgroundColor: notTotallyWhite,
+  },
+  map: {
+    flexGrow: 1,
+    height: 256,
   },
   header: {
-    backgroundColor: notTotallyWhite,
+    backgroundColor: black,
     padding: 16,
+    paddingTop: Constants.statusBarHeight + 16,
+    paddingLeft: 0,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    shadowColor: '#dddddd',
+    shadowColor: '#888888',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
+    shadowOpacity: 1,
     shadowRadius: 2,
-  },
-  headerMainText: {
-    fontSize: 32,
-    fontFamily: 'comfortaa',
-    color: trueBlack,
   },
   loading: {
     marginBottom: 16,
+  },
+  legs: {
+    backgroundColor: '#FFF',
+    shadowColor: '#888888',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+  },
+  backButton: {
+    zIndex: 2,
+    position: 'absolute',
+    left: 16,
+    top: 16 + Constants.statusBarHeight,
+    shadowColor: '#888888',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    borderRadius: 500,
+    backgroundColor: '#FFF',
+    paddingLeft: 10,
+    paddingRight: 12,
+    paddingTop: 2,
   },
 });

@@ -39,8 +39,8 @@ class ResultsScreen extends React.Component {
                 key={index}
                 style={{
                   marginBottom: 8,
-                  paddingLeft: 8,
-                  paddingRight: 8,
+                  paddingLeft: 16,
+                  paddingRight: 16,
                   backgroundColor: '#FFF',
                 }}>
                 <TouchableOpacity

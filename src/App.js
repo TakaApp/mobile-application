@@ -2,14 +2,16 @@ import React from 'react';
 
 import 'moment/locale/fr';
 import moment from 'moment';
+import uuidv4 from 'uuid/v4';
 
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { ScreenOrientation, AppLoading, Asset, Font, AsyncStorage } from 'expo';
+import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { ScreenOrientation, AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './navigation/AppNavigator';
 import Error from '@/components/Error';
-import uuidv4 from 'uuid/v4';
+
+import '@/services/Analytics';
 
 moment.locale('fr');
 

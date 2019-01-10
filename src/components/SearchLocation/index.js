@@ -72,6 +72,7 @@ class SearchLocation extends Component {
 
   render() {
     const { loading, hasSearched, data } = this.state;
+    const { disableMyPosition } = this.props;
 
     return (
       <View>
@@ -93,9 +94,11 @@ class SearchLocation extends Component {
             </View>
           )}
           <View style={{ position: 'absolute', right: 8, top: 8 }}>
-            <TouchableOpacity onPress={this.getLocationAsync}>
-              <MaterialIcons name="my-location" size={24} />
-            </TouchableOpacity>
+            {!disableMyPosition && (
+              <TouchableOpacity onPress={this.getLocationAsync}>
+                <MaterialIcons name="my-location" size={24} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 

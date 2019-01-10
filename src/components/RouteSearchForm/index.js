@@ -78,7 +78,7 @@ class RouteSearchForm extends Component {
                   <View style={styles.line} />
                 </>
               )}
-              <View style={{ ...styles.dot, borderColor: blue }} />
+              {!simple && <View style={{ ...styles.dot, borderColor: blue }} />}
             </View>
             <View style={{ flexGrow: 1 }}>
               {!simple && (
@@ -106,6 +106,7 @@ class RouteSearchForm extends Component {
                 }}
                 inputText={toText}
                 onInputChange={text => this.props.updateFormValue({ toText: text })}
+                disableMyPosition={simple}
               />
             </View>
             <TouchableOpacity onPress={simple ? this.props.search : this.reverseFromTo}>

@@ -7,6 +7,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import SettingsScreen from '@/screens/SettingsScreen';
 import ItineraryScreen from '@/screens/ItineraryScreen';
 
+import SearchLocationScreen from '@/screens/SearchLocationScreen';
+
 import HomeScreen from '@/screens/HomeScreen';
 import ResultsScreen from '@/screens/ResultsScreen';
 import InfoScreen from '@/screens/InfoScreen';
@@ -43,6 +45,7 @@ InfoStack.navigationOptions = {
 
 const PreferencesStack = createStackNavigator({
   Settings: SettingsScreen,
+  SearchLocation: SearchLocationScreen,
 });
 
 PreferencesStack.navigationOptions = {
@@ -51,26 +54,11 @@ PreferencesStack.navigationOptions = {
   ),
 };
 
-const InfoScreenStack = createStackNavigator({
-  AppInfo: InfoScreen,
-});
-
-InfoScreenStack.navigationOptions = {
-  tabBarLabel: 'Info',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-information'}
-    />
-  ),
-};
-
 export default createBottomTabNavigator(
   {
     HomeStack,
     PreferencesStack,
     InfoStack,
-    InfoScreenStack,
   },
   {
     tabBarOptions: {

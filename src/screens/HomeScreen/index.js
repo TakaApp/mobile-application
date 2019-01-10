@@ -11,6 +11,8 @@ import RouteSearchForm from '@/components/RouteSearchForm';
 import { getSearchParameters, getResults, getIsLoading } from '@/domains/search/selectors';
 import { blue } from '@/utils/colors';
 
+import Shortcuts from './Shortcuts';
+
 class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -54,6 +56,7 @@ class HomeScreen extends React.Component {
         <View style={{ zIndex: 2 }}>
           <RouteSearchForm simple setFromToCurrentPosition />
         </View>
+        <Shortcuts />
         {loading && (
           <View style={styles.loading}>
             <ActivityIndicator />

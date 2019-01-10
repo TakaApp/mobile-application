@@ -52,8 +52,6 @@ class Shortcuts extends React.Component {
   render() {
     const { home, work } = this.state;
 
-    console.log('home', home);
-
     return (
       <View style={{ padding: 16 }}>
         {home && (

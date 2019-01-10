@@ -17,9 +17,14 @@ class Shortcuts extends React.Component {
 
   async componentDidMount() {
     await this.refresh();
+    this._sub = this.props.navigation.addListener('didFocus', this.refresh);
+  }
+  componentWillUnmount() {
+    this._sub.remove();
   }
 
   refresh = async () => {
+    console.log('refresh');
     const home = JSON.parse(await AsyncStorage.getItem('home'));
     const work = JSON.parse(await AsyncStorage.getItem('work'));
 

@@ -18,6 +18,10 @@ export default class SettingsScreen extends React.Component {
 
   async componentDidMount() {
     await this.refresh();
+    this._sub = this.props.navigation.addListener('didFocus', this.refresh);
+  }
+  componentWillUnmount() {
+    this._sub.remove();
   }
 
   refresh = async () => {
@@ -44,26 +48,47 @@ export default class SettingsScreen extends React.Component {
         <TouchableOpacity onPress={this.searchForNewLocation('home')}>
           <LinearGradient
             colors={!home ? ['#F5F7FA', '#B8C6DB'] : ['#0BAB64', '#3BB78F']}
-            style={{ borderRadius: 5, padding: 16 }}>
+            style={{
+              borderRadius: 5,
+              padding: 16,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <View style={{ display: 'flex', flexDirection: 'row-reverse' }}>
               <Ionicons name="ios-home" size={32} color="#FFF" />
             </View>
             <View>
-              {home && <Text>{home.name}</Text>}
-              {!home && <Text>Appuyez pour définir le lieu de votre habitation</Text>}
+              {home && <Text style={{ color: '#FFF' }}>{home.name}</Text>}
+              {!home && (
+                <Text style={{ color: '#FFF' }}>
+                  Appuyez pour définir le lieu de votre habitation
+                </Text>
+              )}
             </View>
           </LinearGradient>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.searchForNewLocation('work')}>
           <LinearGradient
             colors={!work ? ['#F5F7FA', '#B8C6DB'] : ['#0BAB64', '#3BB78F']}
-            style={{ borderRadius: 5, padding: 16, marginTop: 16 }}>
+            style={{
+              borderRadius: 5,
+              padding: 16,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: 16,
+            }}>
             <View style={{ display: 'flex', flexDirection: 'row-reverse' }}>
               <MaterialIcons name="work" size={32} color="#FFF" />
             </View>
             <View>
-              {work && <Text>{work.name}</Text>}
-              {!work && <Text>Appuyez pour définir le lieu de travail</Text>}
+              {work && <Text style={{ color: '#FFF' }}>{work.name}</Text>}
+              {!work && (
+                <Text style={{ color: '#FFF' }}>Appuyez pour définir le lieu de travail</Text>
+              )}
             </View>
           </LinearGradient>
         </TouchableOpacity>

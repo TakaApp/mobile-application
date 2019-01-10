@@ -56,7 +56,7 @@ class HomeScreen extends React.Component {
         <View style={{ zIndex: 2 }}>
           <RouteSearchForm simple setFromToCurrentPosition />
         </View>
-        <Shortcuts />
+        <Shortcuts navigation={this.props.navigation} />
         {loading && (
           <View style={styles.loading}>
             <ActivityIndicator />

@@ -7,6 +7,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import SettingsScreen from '@/screens/SettingsScreen';
 import ItineraryScreen from '@/screens/ItineraryScreen';
 
+import SearchLocationScreen from '@/screens/SearchLocationScreen';
+
 import HomeScreen from '@/screens/HomeScreen';
 import ResultsScreen from '@/screens/ResultsScreen';
 import InfoScreen from '@/screens/InfoScreen';
@@ -18,7 +20,7 @@ const HomeStack = createStackNavigator({
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Taka',
+  tabBarLabel: '',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -27,32 +29,40 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const InfoStack = createStackNavigator({
+  Info: InfoScreen,
 });
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+InfoStack.navigationOptions = {
+  // tabBarLabel: 'Infos',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-options'}
+    />
+  ),
+};
+
+const PreferencesStack = createStackNavigator({
+  Settings: SettingsScreen,
+  SearchLocation: SearchLocationScreen,
+});
+
+PreferencesStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
 };
 
-const InfoScreenStack = createStackNavigator({
-  AppInfo: InfoScreen,
-});
-
-InfoScreenStack.navigationOptions = {
-  tabBarLabel: 'Info',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-information'}
-    />
-  ),
-};
-
-export default createBottomTabNavigator({
-  HomeStack,
-  InfoScreenStack,
-});
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    PreferencesStack,
+    InfoStack,
+  },
+  {
+    tabBarOptions: {
+      showLabel: false,
+    },
+  }
+);

@@ -5,7 +5,17 @@ import { bindActionCreators } from 'redux';
 
 import moment from 'moment';
 
-import { View, Button, StyleSheet, Text, DatePickerIOS, TouchableOpacity } from 'react-native';
+import {
+  Platform,
+  View,
+  Button,
+  StyleSheet,
+  Text,
+  DatePickerIOS,
+  DatePickerAndroid,
+  TouchableOpacity,
+  TimePickerAndroid,
+} from 'react-native';
 import { LinearGradient, Constants, Location, Permissions } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
@@ -14,8 +24,6 @@ import { getSearchParameters, getFormValues } from '@/domains/search/selectors';
 import { white, black, blue, red } from '@/utils/colors';
 
 import NavigationService from '@/services/Navigation';
-
-import SearchLocation from '../SearchLocation';
 
 class RouteSearchForm extends Component {
   state = {
@@ -58,6 +66,43 @@ class RouteSearchForm extends Component {
         });
       },
     });
+  };
+
+  changeDateOnAndroid = async () => {
+    const { date } = this.props.searchParameters;
+
+    const { action, year, month, day } = await DatePickerAndroid.open({
+      date: new Date(date),
+    });
+
+    if (action === DatePickerAndroid.dismissedAction) return;
+    const newDate = moment(date);
+    newDate.set({
+      year,
+      month,
+      date: day,
+    });
+
+    this.setDate(newDate.toISOString());
+  };
+  changeHourOnAndroid = async () => {
+    const { date } = this.props.searchParameters;
+    const momentDate = moment(date);
+
+    const { action, hour, minute } = await TimePickerAndroid.open({
+      hour: momentDate.get('hour'),
+      minute: momentDate.get('minutes'),
+      is24Hour: true,
+    });
+
+    if (action === TimePickerAndroid.dismissedAction) return;
+
+    const newDate = moment(date);
+    newDate.set({
+      hour,
+      minute,
+    });
+    this.setDate(newDate.toISOString());
   };
 
   reverseFromTo = () => {
@@ -164,7 +209,7 @@ class RouteSearchForm extends Component {
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
-                  justifyContent: 'center',
+                  justifyContent: 'space-evenly',
                   alignItems: 'center',
                 }}>
                 <Button
@@ -176,21 +221,52 @@ class RouteSearchForm extends Component {
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                   <TouchableOpacity onPress={this.setArriveBy(false)}>
                     <LinearGradient
-                      colors={arriveBy ? [] : ['#5f6fee', '#5f8eee']}
+                      colors={arriveBy ? ['#FFF', '#FFF'] : ['#5f6fee', '#5f8eee']}
                       style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
                       <Text style={{ color: arriveBy ? black : white }}>Partir à</Text>
                     </LinearGradient>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={this.setArriveBy(true)}>
                     <LinearGradient
-                      colors={arriveBy ? ['#5f6fee', '#5f8eee'] : []}
+                      colors={arriveBy ? ['#5f6fee', '#5f8eee'] : ['#FFF', '#FFF']}
                       style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
                       <Text style={{ color: arriveBy ? white : black }}>Arriver à</Text>
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
               </View>
-              <DatePickerIOS date={date} onDateChange={this.setDate} />
+              {Platform.OS === 'ios' && <DatePickerIOS date={date} onDateChange={this.setDate} />}
+              {Platform.OS === 'android' && (
+                <View
+                  style={{
+                    padding: 16,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                  }}>
+                  <TouchableOpacity onPress={this.changeDateOnAndroid}>
+                    <LinearGradient
+                      colors={['#5f6fee', '#5f8eee']}
+                      style={{ padding: 8, borderRadius: 5 }}>
+                      <Text style={{ textAlign: 'center', color: 'white' }}>
+                        {moment(date).format('DD/MM/YYYY')}
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                  <Text style={{ textAlign: 'center' }}> à </Text>
+                  <TouchableOpacity onPress={this.changeHourOnAndroid}>
+                    <LinearGradient
+                      colors={['#5f6fee', '#5f8eee']}
+                      style={{ padding: 8, borderRadius: 5 }}>
+                      <Text style={{ textAlign: 'center', color: 'white' }}>
+                        {moment(date).format('HH:mm')}
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           )}
         </View>

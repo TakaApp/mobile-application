@@ -27,6 +27,7 @@ export default class SearchLocationScreen extends React.Component {
           }}
           inputText={searchText}
           onInputChange={searchText => this.setState({ searchText })}
+          autoFocus
         />
       </View>
     );

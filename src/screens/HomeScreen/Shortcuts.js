@@ -24,7 +24,6 @@ class Shortcuts extends React.Component {
   }
 
   refresh = async () => {
-    console.log('refresh');
     const home = JSON.parse(await AsyncStorage.getItem('home'));
     const work = JSON.parse(await AsyncStorage.getItem('work'));
 

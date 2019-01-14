@@ -84,6 +84,7 @@ class SearchLocation extends Component {
             value={this.props.inputText}
             placeholder={this.props.placeholder}
             onFocus={this.props.onFocus}
+            autoFocus={this.props.autoFocus}
           />
 
           {loading && (
@@ -103,7 +104,7 @@ class SearchLocation extends Component {
         </View>
 
         {/* suggestions */}
-        <View style={{ position: 'absolute', top: 32 }}>
+        <View style={{ marginTop: 8 }}>
           {hasSearched && data.length === 0 && (
             <FlatList
               keyExtractor={item => item}

@@ -13,6 +13,8 @@ import { updateSearchParameters, updateFormValue, search } from '@/domains/searc
 import { getSearchParameters, getFormValues } from '@/domains/search/selectors';
 import { white, black, blue, red } from '@/utils/colors';
 
+import NavigationService from '@/services/Navigation';
+
 import SearchLocation from '../SearchLocation';
 
 class RouteSearchForm extends Component {
@@ -46,6 +48,17 @@ class RouteSearchForm extends Component {
   setArriveBy = arriveBy => () => this.props.updateSearchParameters({ arriveBy });
 
   toggleDateOptions = () => this.setState({ dateOptionsOpened: !this.state.dateOptionsOpened });
+
+  searchForNewLocation = location => () => {
+    NavigationService.navigate('SearchLocation', {
+      callback: place => {
+        this.props.updateSearchParameters({ [location]: place, changeScreen: this.props.simple });
+        this.props.updateFormValue({
+          toText: place.name,
+        });
+      },
+    });
+  };
 
   reverseFromTo = () => {
     const { fromText, toText } = this.props.formValues;
@@ -82,32 +95,33 @@ class RouteSearchForm extends Component {
             </View>
             <View style={{ flexGrow: 1 }}>
               {!simple && (
-                <View style={{ zIndex: 99 }}>
-                  <SearchLocation
-                    placeholder="Départ.."
-                    onSelect={place => {
-                      this.change('from', place);
-                      this.props.updateFormValue({ fromText: place.name });
-                    }}
-                    inputText={fromText}
-                    onInputChange={text => this.props.updateFormValue({ fromText: text })}
-                  />
+                <View>
+                  <TouchableOpacity onPress={this.searchForNewLocation('from')}>
+                    <View style={styles.input}>
+                      <Text>{fromText || 'Départ..'}</Text>
+                    </View>
+                  </TouchableOpacity>
                   <View style={{ marginBottom: 8 }} />
                 </View>
               )}
-              <SearchLocation
-                placeholder="Où est-ce qu'on va ?"
-                onSelect={place => {
-                  this.change('to', place);
-                  this.props.updateFormValue({
-                    toText: place.name,
-                    changeScreen: this.props.simple,
-                  });
-                }}
-                inputText={toText}
-                onInputChange={text => this.props.updateFormValue({ toText: text })}
-                disableMyPosition={simple}
-              />
+              <TouchableOpacity onPress={this.searchForNewLocation('to')}>
+                <View style={styles.input}>
+                  <Text>{toText || "Où est-ce qu'on va ?"}</Text>
+                </View>
+              </TouchableOpacity>
+              {/*<SearchLocation*/}
+              {/*  placeholder="Où est-ce qu'on va ?"*/}
+              {/*  onSelect={place => {*/}
+              {/*    this.change('to', place);*/}
+              {/*    this.props.updateFormValue({*/}
+              {/*      toText: place.name,*/}
+              {/*      changeScreen: this.props.simple,*/}
+              {/*    });*/}
+              {/*  }}*/}
+              {/*  inputText={toText}*/}
+              {/*  onInputChange={text => this.props.updateFormValue({ toText: text })}*/}
+              {/*  disableMyPosition={simple}*/}
+              {/*/>*/}
             </View>
             <TouchableOpacity onPress={simple ? this.props.search : this.reverseFromTo}>
               <View
@@ -213,6 +227,20 @@ const styles = StyleSheet.create({
   },
   datePicker: {
     flexGrow: 1,
+  },
+  input: {
+    display: 'flex',
+    justifyContent: 'center',
+    height: 40,
+    paddingLeft: 8,
+    borderRadius: 4,
+
+    flexGrow: 1,
+    backgroundColor: '#FFF',
+    shadowColor: '#dddddd',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
 });
 

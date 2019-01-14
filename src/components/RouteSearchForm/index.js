@@ -84,15 +84,14 @@ class RouteSearchForm extends Component {
       <View style={styles.container}>
         <View style={{ zIndex: 99 }}>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <View style={styles.itineraryillustration}>
-              {!simple && (
-                <>
-                  <View style={{ ...styles.dot, borderColor: red }} />
-                  <View style={styles.line} />
-                </>
-              )}
-              {!simple && <View style={{ ...styles.dot, borderColor: blue }} />}
-            </View>
+            {!simple && (
+              <View style={styles.itineraryillustration}>
+                <View style={{ ...styles.dot, borderColor: red }} />
+                <View style={styles.line} />
+                <View style={{ ...styles.dot, borderColor: blue }} />
+              </View>
+            )}
+            {simple && <View style={{ paddingLeft: 16 }} />}
             <View style={{ flexGrow: 1 }}>
               {!simple && (
                 <View>
@@ -123,20 +122,22 @@ class RouteSearchForm extends Component {
               {/*  disableMyPosition={simple}*/}
               {/*/>*/}
             </View>
-            <TouchableOpacity onPress={simple ? this.props.search : this.reverseFromTo}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                  paddingLeft: 8,
-                  paddingRight: 8,
-                  justifyContent: 'center',
-                }}>
-                {!simple && <MaterialIcons name="swap-vert" size={32} color={black} />}
-                {simple && <Ionicons name="ios-search" size={26} color="transparent" />}
-              </View>
-            </TouchableOpacity>
+            {!simple && (
+              <TouchableOpacity onPress={this.reverseFromTo}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flexGrow: 1,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    justifyContent: 'center',
+                  }}>
+                  {!simple && <MaterialIcons name="swap-vert" size={32} color={black} />}
+                </View>
+              </TouchableOpacity>
+            )}
+            {simple && <View style={{ paddingRight: 16 }} />}
           </View>
         </View>
         <View style={{ zIndex: 0 }}>
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     right: -3,
   },
   itineraryillustration: {
-    paddingLeft: 8,
+    paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 16,
     paddingBottom: 16,

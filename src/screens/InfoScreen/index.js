@@ -24,7 +24,6 @@ class InfoScreen extends React.Component {
               <Text style={{ textAlign: 'center', fontWeight: '800', marginBottom: 8 }}>
                 Roadmap
               </Text>
-              <Text>- Adresses favorites accessibles depuis l'écran d'accueil</Text>
               <Text>- Application Android</Text>
               <Text>- Pouvoir déplier la liste des arrêts</Text>
               <Text>- Page avec les perturbations TAN en temps réel</Text>

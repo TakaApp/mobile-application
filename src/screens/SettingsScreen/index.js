@@ -47,7 +47,9 @@ export default class SettingsScreen extends React.Component {
       <View style={{ padding: 16 }}>
         <TouchableOpacity onPress={this.searchForNewLocation('home')}>
           <LinearGradient
-            colors={!home ? ['#F5F7FA', '#B8C6DB'] : ['#0BAB64', '#3BB78F']}
+            colors={!home ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}
+            start={{ x: 0, y: 0.6 }}
+            end={{ x: 1, y: 0.25 }}
             style={{
               borderRadius: 5,
               padding: 16,
@@ -71,7 +73,9 @@ export default class SettingsScreen extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity onPress={this.searchForNewLocation('work')}>
           <LinearGradient
-            colors={!work ? ['#F5F7FA', '#B8C6DB'] : ['#0BAB64', '#3BB78F']}
+            colors={!work ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}
+            start={{ x: 0, y: 0.6 }}
+            end={{ x: 1, y: 0.25 }}
             style={{
               borderRadius: 5,
               padding: 16,

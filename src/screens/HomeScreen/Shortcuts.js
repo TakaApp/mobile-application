@@ -59,7 +59,9 @@ class Shortcuts extends React.Component {
         {home && (
           <TouchableOpacity onPress={() => this.search(home)}>
             <LinearGradient
-              colors={['#0BAB64', '#3BB78F']}
+              colors={['#09c6f9', '#045de9']}
+              start={{ x: 0, y: 0.6 }}
+              end={{ x: 1, y: 0.25 }}
               style={{
                 borderRadius: 5,
                 padding: 16,
@@ -80,7 +82,9 @@ class Shortcuts extends React.Component {
         {work && (
           <TouchableOpacity onPress={() => this.search(work)}>
             <LinearGradient
-              colors={['#0BAB64', '#3BB78F']}
+              colors={['#09c6f9', '#045de9']}
+              start={{ x: 0, y: 0.6 }}
+              end={{ x: 1, y: 0.25 }}
               style={{
                 borderRadius: 5,
                 padding: 16,

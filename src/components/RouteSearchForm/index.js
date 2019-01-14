@@ -127,7 +127,7 @@ class RouteSearchForm extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={{ zIndex: 99 }}>
+        <View>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             {!simple && (
               <View style={styles.itineraryillustration}>
@@ -185,7 +185,7 @@ class RouteSearchForm extends Component {
             {simple && <View style={{ paddingRight: 16 }} />}
           </View>
         </View>
-        <View style={{ zIndex: 0 }}>
+        <View style={{ marginTop: 8 }}>
           {!simple && (
             <TouchableOpacity onPress={this.toggleDateOptions}>
               <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -216,20 +216,39 @@ class RouteSearchForm extends Component {
                   onPress={() =>
                     this.props.updateSearchParameters({ date: new Date(), arriveBy: false })
                   }
+                  style={{ color: '#09c6f9' }}
                   title="Maintenant"
                 />
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                   <TouchableOpacity onPress={this.setArriveBy(false)}>
                     <LinearGradient
-                      colors={arriveBy ? ['#FFF', '#FFF'] : ['#5f6fee', '#5f8eee']}
-                      style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                      colors={arriveBy ? ['#FFF', '#FFF'] : ['#09c6f9', '#045de9']}
+                      start={{ x: 0, y: 0.6 }}
+                      end={{ x: 1, y: 0.25 }}
+                      style={{
+                        padding: 15,
+                        alignItems: 'center',
+                        borderTopLeftRadius: 5,
+                        borderBottomLeftRadius: 5,
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      }}>
                       <Text style={{ color: arriveBy ? black : white }}>Partir à</Text>
                     </LinearGradient>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={this.setArriveBy(true)}>
                     <LinearGradient
-                      colors={arriveBy ? ['#5f6fee', '#5f8eee'] : ['#FFF', '#FFF']}
-                      style={{ padding: 15, alignItems: 'center', borderRadius: 5 }}>
+                      colors={!arriveBy ? ['#FFF', '#FFF'] : ['#09c6f9', '#045de9']}
+                      end={{ x: 0, y: 0.6 }}
+                      start={{ x: 1, y: 0.25 }}
+                      style={{
+                        padding: 15,
+                        alignItems: 'center',
+                        borderTopRightRadius: 5,
+                        borderBottomRightRadius: 5,
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                      }}>
                       <Text style={{ color: arriveBy ? white : black }}>Arriver à</Text>
                     </LinearGradient>
                   </TouchableOpacity>
@@ -308,9 +327,8 @@ const styles = StyleSheet.create({
   input: {
     display: 'flex',
     justifyContent: 'center',
-    height: 40,
-    paddingLeft: 8,
     borderRadius: 4,
+    padding: 16,
 
     flexGrow: 1,
     backgroundColor: '#FFF',

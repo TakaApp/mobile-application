@@ -76,8 +76,6 @@ class ItineraryScreen extends React.Component {
         <View>
           <View
             style={{
-              // paddingLeft: 8,
-              // paddingRight: 8,
               backgroundColor: '#FFF',
             }}>
             <View style={styles.map}>
@@ -85,7 +83,7 @@ class ItineraryScreen extends React.Component {
                 ref={c => {
                   this.map = c;
                 }}
-                onLayout={() => this.map.fitToElements()}
+                onLayout={() => this.map.fitToElements(true)}
                 style={{ flexGrow: 1 }}
                 initialRegion={{
                   latitude: 47.209136,

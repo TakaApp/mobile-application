@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 
 import SearchLocation from '@/components/SearchLocation';
-import NavigationService from '@/services/Navigation';
 
 export default class SearchLocationScreen extends React.Component {
   static navigationOptions = {
@@ -23,7 +22,6 @@ export default class SearchLocationScreen extends React.Component {
         <SearchLocation
           placeholder="Rechercher"
           onSelect={async place => {
-            console.log('go bakc');
             navigation.goBack();
             callback(place);
           }}

@@ -70,7 +70,7 @@ class ItineraryScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.backButton}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-            <Ionicons name="ios-arrow-back" size={32} color={black} />
+            <Ionicons name="ios-arrow-back" size={48} color={black} />
           </TouchableOpacity>
         </View>
         <View>
@@ -187,8 +187,8 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     borderRadius: 500,
     backgroundColor: '#FFF',
-    paddingLeft: 10,
-    paddingRight: 12,
+    paddingLeft: 16,
+    paddingRight: 20,
     paddingTop: 2,
   },
 });

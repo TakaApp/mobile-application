@@ -45,6 +45,10 @@ export default class SettingsScreen extends React.Component {
 
     return (
       <View style={{ padding: 16 }}>
+        <View style={{ marginBottom: 16 }}>
+          <Text>Appuyez pour changer le lieu</Text>
+        </View>
+
         <TouchableOpacity onPress={this.searchForNewLocation('home')}>
           <LinearGradient
             colors={!home ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}

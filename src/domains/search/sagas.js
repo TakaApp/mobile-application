@@ -17,6 +17,8 @@ function* searchOnParameterChanges() {
     // invalid parameters
     if ((!sp.from || !sp.to) && status === 'granted' && !action.payload.changeScreen) return;
 
+    if (!sp.from || !sp.to) return;
+
     yield put({ type: SET_IS_LOADING, payload: true });
     try {
       const response = yield fetch('https://api.nantes.cool/trip', {

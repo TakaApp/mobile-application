@@ -6,6 +6,8 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import NavigationService from '@/services/Navigation';
 
+import { page } from '@/services/Analytics';
+
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: 'Préférences',
@@ -17,8 +19,13 @@ export default class SettingsScreen extends React.Component {
   };
 
   async componentDidMount() {
+    page('settings');
     await this.refresh();
-    this._sub = this.props.navigation.addListener('didFocus', this.refresh);
+
+    this._sub = this.props.navigation.addListener('didFocus', () => {
+      this.refresh();
+      page('settings');
+    });
   }
   componentWillUnmount() {
     this._sub.remove();

@@ -15,6 +15,7 @@ import { Constants } from 'expo';
 import { notTotallyWhite, black } from '@/utils/colors';
 import { getResults, getIsLoading } from '@/domains/search/selectors';
 import NavigationService from '@/services/Navigation';
+import { page } from '@/services/Analytics';
 
 import Header from './Header';
 
@@ -22,6 +23,14 @@ class ResultsScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
+  async componentDidMount() {
+    page('results');
+    this._sub = this.props.navigation.addListener('didFocus', () => page('results'));
+  }
+  componentWillUnmount() {
+    this._sub.remove();
+  }
 
   render() {
     const { results, loading } = this.props;

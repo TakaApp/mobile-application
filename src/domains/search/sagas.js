@@ -4,6 +4,7 @@ import { Permissions } from 'expo';
 import { select, put, takeLatest } from 'redux-saga/effects';
 
 import NavigationService from '@/services/Navigation';
+import { event } from '@/services/Analytics';
 
 import { UPDATE_SEARCH_PARAMETERS, RECEIVED_RESULTS, SET_IS_LOADING } from './constants';
 import { getSearchParameters } from './selectors';
@@ -37,7 +38,9 @@ function* searchOnParameterChanges() {
 
       // on force l'addresse dans le formulaire
       yield put({ type: RECEIVED_RESULTS, payload: results });
+      event('search', 'received', 'itinerary-results', results.length);
     } catch (e) {
+      event('search', 'received', 'error');
       yield put({ type: SET_IS_LOADING, payload: false });
       yield put({ type: RECEIVED_RESULTS, payload: [] });
       yield put({ type: 'ERROR', payload: `Le serveur a quelques problèmes... (ง'̀-'́)ง` });

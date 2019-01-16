@@ -6,6 +6,8 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import NavigationService from '@/services/Navigation';
 
+import { page, event } from '@/services/Analytics';
+
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: 'Préférences',
@@ -17,8 +19,11 @@ export default class SettingsScreen extends React.Component {
   };
 
   async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', () => {
+      this.refresh();
+      page('settings');
+    });
     await this.refresh();
-    this._sub = this.props.navigation.addListener('didFocus', this.refresh);
   }
   componentWillUnmount() {
     this._sub.remove();
@@ -49,7 +54,11 @@ export default class SettingsScreen extends React.Component {
           <Text>Appuyez pour changer le lieu</Text>
         </View>
 
-        <TouchableOpacity onPress={this.searchForNewLocation('home')}>
+        <TouchableOpacity
+          onPress={() => {
+            event('shortcut', 'change', 'home');
+            this.searchForNewLocation('home')();
+          }}>
           <LinearGradient
             colors={!home ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}
             start={{ x: 0, y: 0.6 }}
@@ -75,7 +84,11 @@ export default class SettingsScreen extends React.Component {
             </View>
           </LinearGradient>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.searchForNewLocation('work')}>
+        <TouchableOpacity
+          onPress={() => {
+            event('shortcut', 'change', 'work');
+            this.searchForNewLocation('work');
+          }}>
           <LinearGradient
             colors={!work ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}
             start={{ x: 0, y: 0.6 }}

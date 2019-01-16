@@ -10,6 +10,9 @@ import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 import Error from '@/components/Error';
 
+import '@/services/Analytics';
+import { init as initAnalytics } from './services/Analytics';
+
 moment.locale('fr');
 
 export default class App extends React.Component {
@@ -17,8 +20,9 @@ export default class App extends React.Component {
     isLoadingComplete: false,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
+    await initAnalytics();
   }
 
   render() {

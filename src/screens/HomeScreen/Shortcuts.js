@@ -8,6 +8,7 @@ import { LinearGradient, Location } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import { updateSearchParameters, updateFormValue } from '@/domains/search/actions';
+import { event } from '@/services/Analytics';
 
 class Shortcuts extends React.Component {
   state = {
@@ -52,12 +53,14 @@ class Shortcuts extends React.Component {
   render() {
     const { home, work } = this.state;
 
-    console.log('home', home);
-
     return (
       <View style={{ padding: 16 }}>
         {home && (
-          <TouchableOpacity onPress={() => this.search(home)}>
+          <TouchableOpacity
+            onPress={() => {
+              event('shortcut', 'click', 'home');
+              this.search(home);
+            }}>
             <LinearGradient
               colors={['#09c6f9', '#045de9']}
               start={{ x: 0, y: 0.6 }}
@@ -80,7 +83,11 @@ class Shortcuts extends React.Component {
           </TouchableOpacity>
         )}
         {work && (
-          <TouchableOpacity onPress={() => this.search(work)}>
+          <TouchableOpacity
+            onPress={() => {
+              event('shortcut', 'click', 'work');
+              this.search(work);
+            }}>
             <LinearGradient
               colors={['#09c6f9', '#045de9']}
               start={{ x: 0, y: 0.6 }}

@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { notTotallyWhite, black, red, blue } from '@/utils/colors';
 import { getResults, getSearchParameters } from '@/domains/search/selectors';
+import { page } from '@/services/Analytics';
 
 import LegFactory from './Legs/LegFactory';
 import Header from './Header';
@@ -59,8 +60,15 @@ class ItineraryScreen extends React.Component {
     header: null,
   };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     this.map.fitToElements();
+  }
+
+  async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', () => page('itinerary'));
+  }
+  componentWillUnmount() {
+    this._sub.remove();
   }
 
   render() {

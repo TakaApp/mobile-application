@@ -3,10 +3,19 @@ import React from 'react';
 import { Constants } from 'expo';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 
+import { page } from '@/services/Analytics';
+
 class InfoScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
+  async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', () => page('info'));
+  }
+  componentWillUnmount() {
+    this._sub.remove();
+  }
 
   render() {
     const { manifest } = Constants;

@@ -2,6 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 import SearchLocation from '@/components/SearchLocation';
+import { page } from '@/services/Analytics';
 
 export default class SearchLocationScreen extends React.Component {
   static navigationOptions = {
@@ -11,6 +12,13 @@ export default class SearchLocationScreen extends React.Component {
   state = {
     searchText: '',
   };
+
+  async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', () => page('searchLocation'));
+  }
+  componentWillUnmount() {
+    this._sub.remove();
+  }
 
   render() {
     const { searchText } = this.state;

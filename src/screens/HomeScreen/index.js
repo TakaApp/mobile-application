@@ -10,6 +10,7 @@ import RouteSearchForm from '@/components/RouteSearchForm';
 
 import { getSearchParameters, getResults, getIsLoading } from '@/domains/search/selectors';
 import { blue } from '@/utils/colors';
+import { page } from '@/services/Analytics';
 
 import Shortcuts from './Shortcuts';
 
@@ -17,6 +18,15 @@ class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
+
+  async componentDidMount() {
+    this._sub = this.props.navigation.addListener('didFocus', () => {
+      page('home');
+    });
+  }
+  componentWillUnmount() {
+    this._sub.remove();
+  }
 
   state = {
     loading: false,

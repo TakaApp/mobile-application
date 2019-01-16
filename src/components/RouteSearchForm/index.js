@@ -25,6 +25,8 @@ import { white, black, blue, red } from '@/utils/colors';
 
 import NavigationService from '@/services/Navigation';
 
+import { event } from '@/services/Analytics';
+
 class RouteSearchForm extends Component {
   state = {
     dateOptionsOpened: false,
@@ -140,7 +142,11 @@ class RouteSearchForm extends Component {
             <View style={{ flexGrow: 1 }}>
               {!simple && (
                 <View>
-                  <TouchableOpacity onPress={this.searchForNewLocation('from')}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      event('location', 'change', 'from');
+                      this.searchForNewLocation('from')();
+                    }}>
                     <View style={styles.input}>
                       <Text>{fromText || 'Départ..'}</Text>
                     </View>
@@ -148,7 +154,11 @@ class RouteSearchForm extends Component {
                   <View style={{ marginBottom: 8 }} />
                 </View>
               )}
-              <TouchableOpacity onPress={this.searchForNewLocation('to')}>
+              <TouchableOpacity
+                onPress={() => {
+                  event('location', 'change', 'to');
+                  this.searchForNewLocation('to')();
+                }}>
                 <View style={styles.input}>
                   <Text>{toText || "Où est-ce qu'on va ?"}</Text>
                 </View>
@@ -187,7 +197,11 @@ class RouteSearchForm extends Component {
         </View>
         <View style={{ marginTop: 8 }}>
           {!simple && (
-            <TouchableOpacity onPress={this.toggleDateOptions}>
+            <TouchableOpacity
+              onPress={() => {
+                event('location', 'toggle', 'date');
+                this.toggleDateOptions();
+              }}>
               <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <View style={styles.itineraryillustration}>
                   <Ionicons name="ios-time" size={16} color={black} />

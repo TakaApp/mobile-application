@@ -14,7 +14,6 @@ export default class SearchLocationScreen extends React.Component {
   };
 
   async componentDidMount() {
-    page('searchLocation');
     this._sub = this.props.navigation.addListener('didFocus', () => page('searchLocation'));
   }
   componentWillUnmount() {

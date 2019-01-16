@@ -19,13 +19,11 @@ export default class SettingsScreen extends React.Component {
   };
 
   async componentDidMount() {
-    page('settings');
-    await this.refresh();
-
     this._sub = this.props.navigation.addListener('didFocus', () => {
       this.refresh();
       page('settings');
     });
+    await this.refresh();
   }
   componentWillUnmount() {
     this._sub.remove();

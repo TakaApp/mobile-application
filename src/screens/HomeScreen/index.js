@@ -20,8 +20,9 @@ class HomeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    page('home');
-    this._sub = this.props.navigation.addListener('didFocus', () => page('home'));
+    this._sub = this.props.navigation.addListener('didFocus', () => {
+      page('home');
+    });
   }
   componentWillUnmount() {
     this._sub.remove();

@@ -11,7 +11,6 @@ class InfoScreen extends React.Component {
   };
 
   async componentDidMount() {
-    page('info');
     this._sub = this.props.navigation.addListener('didFocus', () => page('info'));
   }
   componentWillUnmount() {

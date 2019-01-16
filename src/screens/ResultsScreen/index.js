@@ -25,7 +25,6 @@ class ResultsScreen extends React.Component {
   };
 
   async componentDidMount() {
-    page('results');
     this._sub = this.props.navigation.addListener('didFocus', () => page('results'));
   }
   componentWillUnmount() {

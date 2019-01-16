@@ -65,7 +65,6 @@ class ItineraryScreen extends React.Component {
   }
 
   async componentDidMount() {
-    page('itinerary');
     this._sub = this.props.navigation.addListener('didFocus', () => page('itinerary'));
   }
   componentWillUnmount() {

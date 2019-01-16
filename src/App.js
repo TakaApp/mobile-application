@@ -2,9 +2,8 @@ import React from 'react';
 
 import 'moment/locale/fr';
 import moment from 'moment';
-import uuidv4 from 'uuid/v4';
 
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { ScreenOrientation, AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -12,6 +11,7 @@ import AppNavigator from './navigation/AppNavigator';
 import Error from '@/components/Error';
 
 import '@/services/Analytics';
+import { init as initAnalytics } from './services/Analytics';
 
 moment.locale('fr');
 
@@ -22,11 +22,7 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     ScreenOrientation.allowAsync(ScreenOrientation.Orientation.PORTRAIT);
-    const uid = await AsyncStorage.getItem('uid');
-
-    if (!uid) {
-      await AsyncStorage.setItem('uid', uuidv4());
-    }
+    await initAnalytics();
   }
 
   render() {

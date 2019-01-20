@@ -140,7 +140,7 @@ class ItineraryScreen extends React.Component {
                 </MapView>
               </View>
             </View>
-            <Header itinerary={itinerary} isSelected />
+            <Header itinerary={itinerary} />
           </View>
           <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
         </ScrollView>

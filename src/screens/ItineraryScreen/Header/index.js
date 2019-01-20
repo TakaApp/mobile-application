@@ -9,11 +9,11 @@ import { black, white } from '@/utils/colors';
 
 export default class ItineraryScreen extends Component {
   render() {
-    const { itinerary: i, isSelected } = this.props;
+    const { itinerary: i } = this.props;
 
     return (
       <LinearGradient
-        colors={isSelected ? ['#83EAF1', '#63A4FF'] : ['#FFF', '#FFF']}
+        colors={['#FF928B', '#FFAC81']}
         start={{ x: 0, y: 0.6 }}
         end={{ x: 1, y: 0.25 }}
         style={{

@@ -60,7 +60,7 @@ export default class SettingsScreen extends React.Component {
             this.searchForNewLocation('home')();
           }}>
           <LinearGradient
-            colors={!home ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}
+            colors={home ? ['#09c6f9', '#045de9'] : ['#BDD4E7', '#BDD4E7']}
             start={{ x: 0, y: 0.6 }}
             end={{ x: 1, y: 0.25 }}
             style={{
@@ -76,11 +76,7 @@ export default class SettingsScreen extends React.Component {
             </View>
             <View>
               {home && <Text style={{ color: '#FFF' }}>{home.name}</Text>}
-              {!home && (
-                <Text style={{ color: '#FFF' }}>
-                  Appuyez pour définir le lieu de votre habitation
-                </Text>
-              )}
+              {!home && <Text style={{ color: '#FFF' }}>Appuyez pour définir un lieu</Text>}
             </View>
           </LinearGradient>
         </TouchableOpacity>
@@ -90,7 +86,7 @@ export default class SettingsScreen extends React.Component {
             this.searchForNewLocation('work');
           }}>
           <LinearGradient
-            colors={!work ? ['#09c6f9', '#045de9'] : ['#09c6f9', '#045de9']}
+            colors={work ? ['#09c6f9', '#045de9'] : ['#BDD4E7', '#BDD4E7']}
             start={{ x: 0, y: 0.6 }}
             end={{ x: 1, y: 0.25 }}
             style={{
@@ -107,9 +103,7 @@ export default class SettingsScreen extends React.Component {
             </View>
             <View>
               {work && <Text style={{ color: '#FFF' }}>{work.name}</Text>}
-              {!work && (
-                <Text style={{ color: '#FFF' }}>Appuyez pour définir le lieu de travail</Text>
-              )}
+              {!work && <Text style={{ color: '#FFF' }}>Appuyez pour définir un lieu</Text>}
             </View>
           </LinearGradient>
         </TouchableOpacity>

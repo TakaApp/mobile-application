@@ -99,7 +99,10 @@ class ItineraryScreen extends React.Component {
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}
-                showsUserLocation>
+                showsUserLocation
+                showsCompass={false}
+                showsScale={false}
+                rotateEnabled={false}>
                 {trips.map((trip, index) => {
                   return (
                     <React.Fragment key={index}>

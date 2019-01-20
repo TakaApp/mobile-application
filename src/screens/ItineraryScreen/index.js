@@ -81,67 +81,67 @@ class ItineraryScreen extends React.Component {
             <Ionicons name="ios-arrow-back" size={48} color={black} />
           </TouchableOpacity>
         </View>
-        <View>
-          <View
-            style={{
-              backgroundColor: '#FFF',
-            }}>
-            <View style={styles.map}>
-              <MapView
-                ref={c => {
-                  this.map = c;
-                }}
-                onLayout={() => this.map.fitToElements(true)}
-                style={{ flexGrow: 1 }}
-                initialRegion={{
-                  latitude: 47.209136,
-                  longitude: -1.547149,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }}
-                showsUserLocation
-                showsCompass={false}
-                showsScale={false}
-                rotateEnabled={false}>
-                {trips.map((trip, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      {trip.polyLines.map(step => (
-                        <Polyline
-                          key={step.id}
-                          coordinates={step.latlngs}
-                          strokeWidth={step.width}
-                          strokeColor={step.color}
-                          lineDashPattern={step.dashArray}
-                        />
-                      ))}
-                    </React.Fragment>
-                  );
-                })}
-                <Marker
-                  identifier="From"
-                  flat
-                  pinColor={red}
-                  coordinate={{
-                    latitude: searchParameters.from.lat,
-                    longitude: searchParameters.from.lng,
-                  }}
-                />
-                <Marker
-                  identifier="To"
-                  flat
-                  pinColor={blue}
-                  coordinate={{
-                    latitude: searchParameters.to.lat,
-                    longitude: searchParameters.to.lng,
-                  }}
-                />
-              </MapView>
-            </View>
-          </View>
-          <Header itinerary={itinerary} isSelected />
-        </View>
         <ScrollView>
+          <View>
+            <View
+              style={{
+                backgroundColor: '#FFF',
+              }}>
+              <View style={styles.map}>
+                <MapView
+                  ref={c => {
+                    this.map = c;
+                  }}
+                  onLayout={() => this.map.fitToElements(true)}
+                  style={{ flexGrow: 1 }}
+                  initialRegion={{
+                    latitude: 47.209136,
+                    longitude: -1.547149,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                  }}
+                  showsUserLocation
+                  showsCompass={false}
+                  showsScale={false}
+                  rotateEnabled={false}>
+                  {trips.map((trip, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        {trip.polyLines.map(step => (
+                          <Polyline
+                            key={step.id}
+                            coordinates={step.latlngs}
+                            strokeWidth={step.width}
+                            strokeColor={step.color}
+                            lineDashPattern={step.dashArray}
+                          />
+                        ))}
+                      </React.Fragment>
+                    );
+                  })}
+                  <Marker
+                    identifier="From"
+                    flat
+                    pinColor={red}
+                    coordinate={{
+                      latitude: searchParameters.from.lat,
+                      longitude: searchParameters.from.lng,
+                    }}
+                  />
+                  <Marker
+                    identifier="To"
+                    flat
+                    pinColor={blue}
+                    coordinate={{
+                      latitude: searchParameters.to.lat,
+                      longitude: searchParameters.to.lng,
+                    }}
+                  />
+                </MapView>
+              </View>
+            </View>
+            <Header itinerary={itinerary} isSelected />
+          </View>
           <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
         </ScrollView>
       </View>

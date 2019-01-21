@@ -83,7 +83,7 @@ export default class SettingsScreen extends React.Component {
         <TouchableOpacity
           onPress={() => {
             event('shortcut', 'change', 'work');
-            this.searchForNewLocation('work');
+            this.searchForNewLocation('work')();
           }}>
           <LinearGradient
             colors={work ? ['#09c6f9', '#045de9'] : ['#BDD4E7', '#BDD4E7']}

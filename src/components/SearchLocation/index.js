@@ -54,7 +54,7 @@ class SearchLocation extends Component {
       const data = await response.json();
       this.setState({ data: data || [], hasSearched: true, loading: false });
     } catch (e) {
-      this.props.putError(`Le serveur a quelques problèmes... (ง'̀-'́)ง`);
+      this.props.putError(`On a quelques problèmes pour se connecter au serveur... (ง'̀-'́)ง`);
       this.setState({ loading: false });
     }
   };

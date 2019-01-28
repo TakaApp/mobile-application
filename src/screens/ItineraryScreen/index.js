@@ -81,7 +81,7 @@ class ItineraryScreen extends React.Component {
             <Ionicons name="ios-arrow-back" size={48} color={black} />
           </TouchableOpacity>
         </View>
-        <View>
+        <ScrollView>
           <View
             style={{
               backgroundColor: '#FFF',
@@ -99,7 +99,10 @@ class ItineraryScreen extends React.Component {
                   latitudeDelta: 0.0922,
                   longitudeDelta: 0.0421,
                 }}
-                showsUserLocation>
+                showsUserLocation
+                showsCompass={false}
+                showsScale={false}
+                rotateEnabled={false}>
                 {trips.map((trip, index) => {
                   return (
                     <React.Fragment key={index}>
@@ -135,10 +138,8 @@ class ItineraryScreen extends React.Component {
                 />
               </MapView>
             </View>
+            <Header itinerary={itinerary} />
           </View>
-          <Header itinerary={itinerary} isSelected />
-        </View>
-        <ScrollView>
           <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
         </ScrollView>
       </View>
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flexGrow: 1,
-    height: 256,
+    height: 384,
   },
   header: {
     backgroundColor: black,

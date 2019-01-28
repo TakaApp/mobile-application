@@ -30,6 +30,7 @@
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",
     "redux-saga": "^0.16.2",
+    "sentry-expo": "^1.11.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

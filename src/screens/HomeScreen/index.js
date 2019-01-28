@@ -49,7 +49,10 @@ class HomeScreen extends React.Component {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}
-            showsUserLocation>
+            showsUserLocation
+            showsCompass={false}
+            showsScale={false}
+            rotateEnabled={false}>
             {searchParameters.to && (
               <Marker
                 identifier="To"

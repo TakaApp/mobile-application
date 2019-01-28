@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { Permissions } from 'expo';
+import Sentry from 'sentry-expo';
 
 import { select, put, takeLatest } from 'redux-saga/effects';
 
@@ -43,6 +44,15 @@ function* searchOnParameterChanges() {
       event('search', 'received', 'itinerary-results', results.length);
     } catch (e) {
       event('search', 'received', 'error');
+      Sentry.captureMessage(
+        `Failed to search with: ${JSON.stringify({
+          arriveBy: sp.arriveBy ? 'true' : 'false',
+          time: moment(sp.date).format('HH:mm'),
+          date: moment(sp.date).format('MM-DD-YYYY'),
+          from: `${sp.from.lat},${sp.from.lng}`,
+          to: `${sp.to.lat},${sp.to.lng}`,
+        })}`
+      );
       yield put({ type: SET_IS_LOADING, payload: false });
       yield put({ type: RECEIVED_RESULTS, payload: [] });
       yield put({ type: 'ERROR', payload: `Le serveur a quelques problèmes... (ง'̀-'́)ง` });

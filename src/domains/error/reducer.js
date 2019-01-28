@@ -1,3 +1,5 @@
+import Sentry from 'sentry-expo';
+
 import { handleActions } from 'redux-actions';
 
 import { ERROR, DISMISS_ERROR } from './constants';
@@ -9,11 +11,15 @@ const initialState = {
 
 export const error = handleActions(
   {
-    [ERROR]: (state, action) => ({
-      ...state,
-      message: action.payload,
-      error: true,
-    }),
+    [ERROR]: (state, action) => {
+      Sentry.captureMessage(action.payload);
+
+      return {
+        ...state,
+        message: action.payload,
+        error: true,
+      };
+    },
     [DISMISS_ERROR]: state => ({
       ...state,
       ...initialState,

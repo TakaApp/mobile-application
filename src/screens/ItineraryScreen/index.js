@@ -82,63 +82,61 @@ class ItineraryScreen extends React.Component {
           </TouchableOpacity>
         </View>
         <ScrollView>
-          <View>
-            <View
-              style={{
-                backgroundColor: '#FFF',
-              }}>
-              <View style={styles.map}>
-                <MapView
-                  ref={c => {
-                    this.map = c;
+          <View
+            style={{
+              backgroundColor: '#FFF',
+            }}>
+            <View style={styles.map}>
+              <MapView
+                ref={c => {
+                  this.map = c;
+                }}
+                onLayout={() => this.map.fitToElements(true)}
+                style={{ flexGrow: 1 }}
+                initialRegion={{
+                  latitude: 47.209136,
+                  longitude: -1.547149,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+                showsUserLocation
+                showsCompass={false}
+                showsScale={false}
+                rotateEnabled={false}>
+                {trips.map((trip, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      {trip.polyLines.map(step => (
+                        <Polyline
+                          key={step.id}
+                          coordinates={step.latlngs}
+                          strokeWidth={step.width}
+                          strokeColor={step.color}
+                          lineDashPattern={step.dashArray}
+                        />
+                      ))}
+                    </React.Fragment>
+                  );
+                })}
+                <Marker
+                  identifier="From"
+                  flat
+                  pinColor={red}
+                  coordinate={{
+                    latitude: searchParameters.from.lat,
+                    longitude: searchParameters.from.lng,
                   }}
-                  onLayout={() => this.map.fitToElements(true)}
-                  style={{ flexGrow: 1 }}
-                  initialRegion={{
-                    latitude: 47.209136,
-                    longitude: -1.547149,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                />
+                <Marker
+                  identifier="To"
+                  flat
+                  pinColor={blue}
+                  coordinate={{
+                    latitude: searchParameters.to.lat,
+                    longitude: searchParameters.to.lng,
                   }}
-                  showsUserLocation
-                  showsCompass={false}
-                  showsScale={false}
-                  rotateEnabled={false}>
-                  {trips.map((trip, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        {trip.polyLines.map(step => (
-                          <Polyline
-                            key={step.id}
-                            coordinates={step.latlngs}
-                            strokeWidth={step.width}
-                            strokeColor={step.color}
-                            lineDashPattern={step.dashArray}
-                          />
-                        ))}
-                      </React.Fragment>
-                    );
-                  })}
-                  <Marker
-                    identifier="From"
-                    flat
-                    pinColor={red}
-                    coordinate={{
-                      latitude: searchParameters.from.lat,
-                      longitude: searchParameters.from.lng,
-                    }}
-                  />
-                  <Marker
-                    identifier="To"
-                    flat
-                    pinColor={blue}
-                    coordinate={{
-                      latitude: searchParameters.to.lat,
-                      longitude: searchParameters.to.lng,
-                    }}
-                  />
-                </MapView>
-              </View>
+                />
+              </MapView>
             </View>
             <Header itinerary={itinerary} />
           </View>

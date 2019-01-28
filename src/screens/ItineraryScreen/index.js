@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flexGrow: 1,
-    height: 256,
+    height: 384,
   },
   header: {
     backgroundColor: black,

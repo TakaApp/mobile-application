@@ -64,7 +64,7 @@ class RouteSearchForm extends Component {
       callback: place => {
         this.props.updateSearchParameters({ [location]: place, changeScreen: this.props.simple });
         this.props.updateFormValue({
-          toText: place.name,
+          [`${location}Text`]: place.name,
         });
       },
     });
@@ -163,19 +163,6 @@ class RouteSearchForm extends Component {
                   <Text>{toText || "Où est-ce qu'on va ?"}</Text>
                 </View>
               </TouchableOpacity>
-              {/*<SearchLocation*/}
-              {/*  placeholder="Où est-ce qu'on va ?"*/}
-              {/*  onSelect={place => {*/}
-              {/*    this.change('to', place);*/}
-              {/*    this.props.updateFormValue({*/}
-              {/*      toText: place.name,*/}
-              {/*      changeScreen: this.props.simple,*/}
-              {/*    });*/}
-              {/*  }}*/}
-              {/*  inputText={toText}*/}
-              {/*  onInputChange={text => this.props.updateFormValue({ toText: text })}*/}
-              {/*  disableMyPosition={simple}*/}
-              {/*/>*/}
             </View>
             {!simple && (
               <TouchableOpacity onPress={this.reverseFromTo}>

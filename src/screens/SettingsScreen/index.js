@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, TouchableOpacity, AsyncStorage, Platform } from 'react-native';
 
-import { LinearGradient } from 'expo';
+import { LinearGradient, Haptic } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import NavigationService from '@/services/Navigation';
@@ -56,6 +56,9 @@ export default class SettingsScreen extends React.Component {
 
         <TouchableOpacity
           onPress={() => {
+            if (Platform.OS === 'ios') {
+              Haptic.selection();
+            }
             event('shortcut', 'change', 'home');
             this.searchForNewLocation('home')();
           }}>
@@ -82,6 +85,9 @@ export default class SettingsScreen extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            if (Platform.OS === 'ios') {
+              Haptic.selection();
+            }
             event('shortcut', 'change', 'work');
             this.searchForNewLocation('work')();
           }}>

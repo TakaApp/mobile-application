@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { Location, Haptic } from 'expo';
+import Sentry from 'sentry-expo';
 
 import get from 'lodash/get';
 
@@ -65,6 +66,7 @@ class SearchLocation extends Component {
 
       currentPositionName = get(data[0], 'name');
     } catch (e) {
+      Sentry.captureMessage(`${e.message} ${JSON.stringify(e.stack)}`);
       currentPositionName = 'Mon emplacement';
     }
 

@@ -6,11 +6,12 @@ import {
   View,
   Text,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import RouteSearchForm from '@/components/RouteSearchForm';
 
-import { Constants } from 'expo';
+import { Constants, Haptic } from 'expo';
 
 import { notTotallyWhite, black } from '@/utils/colors';
 import { getResults, getIsLoading } from '@/domains/search/selectors';
@@ -52,7 +53,12 @@ class ResultsScreen extends React.Component {
                   backgroundColor: '#FFF',
                 }}>
                 <TouchableOpacity
-                  onPress={() => NavigationService.navigate('Itinerary', { selected: index })}>
+                  onPress={() => {
+                    if (Platform.OS === 'ios') {
+                      Haptic.selection();
+                    }
+                    NavigationService.navigate('Itinerary', { selected: index });
+                  }}>
                   <Header itinerary={result} />
                 </TouchableOpacity>
               </View>

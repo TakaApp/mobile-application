@@ -9,8 +9,9 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
-import { Location } from 'expo';
+import { Location, Haptic } from 'expo';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -36,6 +37,9 @@ class SearchLocation extends Component {
   getLocationAsync = async () => {
     let location = await Location.getCurrentPositionAsync({});
 
+    if (Platform.OS === 'ios') {
+      Haptic.selection();
+    }
     this.props.onSelect({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
@@ -61,6 +65,10 @@ class SearchLocation extends Component {
 
   // called when the user selects an option
   select = ({ lat, lng, text }) => {
+    if (Platform.OS === 'ios') {
+      Haptic.selection();
+    }
+
     // dispatch the event that the user selected a Place
     this.props.onSelect({ lat, lng, name: text });
 

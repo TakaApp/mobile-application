@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, TouchableOpacity, AsyncStorage, Platform } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { LinearGradient, Location } from 'expo';
+import { LinearGradient, Location, Haptic } from 'expo';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 
 import { updateSearchParameters, updateFormValue } from '@/domains/search/actions';
@@ -59,6 +59,9 @@ class Shortcuts extends React.Component {
           <TouchableOpacity
             onPress={() => {
               event('shortcut', 'click', 'home');
+              if (Platform.OS === 'ios') {
+                Haptic.selection();
+              }
               this.search(home);
             }}>
             <LinearGradient
@@ -86,6 +89,9 @@ class Shortcuts extends React.Component {
           <TouchableOpacity
             onPress={() => {
               event('shortcut', 'click', 'work');
+              if (Platform.OS === 'ios') {
+                Haptic.selection();
+              }
               this.search(work);
             }}>
             <LinearGradient

@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import { Location, Haptic } from 'expo';
 
+import get from 'lodash/get';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -40,10 +42,36 @@ class SearchLocation extends Component {
     if (Platform.OS === 'ios') {
       Haptic.selection();
     }
+
+    const lat = location.coords.latitude;
+    const lng = location.coords.longitude;
+
+    let currentPositionName = null;
+
+    try {
+      const response = await fetch(`https://api.nantes.cool/reverse-geocoding`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lat,
+          lng,
+        }),
+      });
+
+      const data = await response.json();
+
+      currentPositionName = get(data[0], 'name');
+    } catch (e) {
+      currentPositionName = 'Mon emplacement';
+    }
+
     this.props.onSelect({
-      lat: location.coords.latitude,
-      lng: location.coords.longitude,
-      name: 'Mon emplacement',
+      lat,
+      lng,
+      name: currentPositionName,
     });
   };
 

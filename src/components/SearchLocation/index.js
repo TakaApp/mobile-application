@@ -10,11 +10,15 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
+  AsyncStorage,
 } from 'react-native';
 import { Location, Haptic } from 'expo';
 import Sentry from 'sentry-expo';
 
 import get from 'lodash/get';
+import uniqBy from 'lodash/uniqBy';
+import remove from 'lodash/remove';
+import isEmpty from 'lodash/isEmpty';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -33,9 +37,20 @@ class SearchLocation extends Component {
     //  type: string
     // }
     data: [],
+    history: [],
     hasSearched: false,
     loading: false,
   };
+
+  async componentDidMount() {
+    let history = [];
+    try {
+      history = JSON.parse(await AsyncStorage.getItem('search-history'));
+      uniqBy(history, 'name');
+      remove(history, i => isEmpty(i) || !i.name || !i.lat || !i.lng);
+    } catch (e) {}
+    this.setState({ history });
+  }
 
   getLocationAsync = async () => {
     let location = await Location.getCurrentPositionAsync({});
@@ -94,10 +109,17 @@ class SearchLocation extends Component {
   };
 
   // called when the user selects an option
-  select = ({ lat, lng, text }) => {
+  select = async ({ lat, lng, text }) => {
     if (Platform.OS === 'ios') {
       Haptic.selection();
     }
+
+    const oldHistory = get(this.state, 'history', []);
+    const newHistory = [...oldHistory];
+
+    newHistory.push({ lat, lng, name: text });
+    while (newHistory.length > 2) newHistory.shift();
+    await AsyncStorage.setItem('search-history', JSON.stringify(newHistory));
 
     // dispatch the event that the user selected a Place
     this.props.onSelect({ lat, lng, name: text });
@@ -105,11 +127,11 @@ class SearchLocation extends Component {
     // update the input text with the place name to make sure the user
     // understands that his choice is validated and clear the data from the
     // API which is no longer used
-    this.setState({ inputText: text, data: [], hasSearched: false });
+    this.setState({ inputText: text, data: [], hasSearched: false, history: newHistory });
   };
 
   render() {
-    const { loading, hasSearched, data } = this.state;
+    const { loading, hasSearched, data, history } = this.state;
     const { disableMyPosition } = this.props;
 
     return (
@@ -150,6 +172,28 @@ class SearchLocation extends Component {
               renderItem={() => <Text style={styles.item}>Aucun résultat (╯°□°）╯︵ ┻━┻</Text>}
             />
           )}
+          {history.length > 0 && (
+            <FlatList
+              keyboardShouldPersistTaps="always"
+              keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
+              data={history}
+              style={{ backgroundColor: '#FFF' }}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.item}
+                  onPress={() =>
+                    this.select({
+                      lat: item.lat,
+                      lng: item.lng,
+                      text: item.name,
+                    })
+                  }>
+                  <Text>{item.name}</Text>
+                  <MaterialIcons name="history" size={24} />
+                </TouchableOpacity>
+              )}
+            />
+          )}
           {data.length > 0 && (
             <FlatList
               keyboardShouldPersistTaps="always"
@@ -158,9 +202,7 @@ class SearchLocation extends Component {
               style={{ backgroundColor: '#FFF' }}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  style={{
-                    zIndex: 9,
-                  }}
+                  style={styles.item}
                   onPress={() =>
                     this.select({
                       lat: item.lat,
@@ -168,7 +210,7 @@ class SearchLocation extends Component {
                       text: item.name,
                     })
                   }>
-                  <Text style={styles.item}>{item.name}</Text>
+                  <Text>{item.name}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -194,9 +236,12 @@ SearchLocation.propTypes = {
 /* component styles */
 const styles = StyleSheet.create({
   item: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     backgroundColor: '#FFF',
-    zIndex: 10,
   },
   input: {
     height: 40,

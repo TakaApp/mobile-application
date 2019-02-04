@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions';
+import get from 'lodash/get';
 
 import {
   UPDATE_SEARCH_PARAMETERS,
@@ -42,13 +43,15 @@ const initialState = {
 
 export const search = handleActions(
   {
-    [UPDATE_SEARCH_PARAMETERS]: (state, action) => ({
-      ...state,
-      parameters: {
-        ...state.parameters,
-        ...action.payload,
-      },
-    }),
+    [UPDATE_SEARCH_PARAMETERS]: (state, action) => {
+      return {
+        ...state,
+        parameters: {
+          ...state.parameters,
+          ...action.payload,
+        },
+      };
+    },
     [RECEIVED_RESULTS]: (state, action) => ({
       ...state,
       results: action.payload,

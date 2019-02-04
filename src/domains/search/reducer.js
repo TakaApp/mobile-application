@@ -39,28 +39,13 @@ const initialState = {
     toText: '',
   },
   loading: false,
-  history: [],
 };
 
 export const search = handleActions(
   {
     [UPDATE_SEARCH_PARAMETERS]: (state, action) => {
-      const from = get(action, 'payload.from', {});
-      const to = get(action, 'payload.to', {});
-      const oldHistory = get(state, 'history', []);
-      const newHistory = [...oldHistory];
-
-      if (from.name && from.name !== 'Mon emplacement') {
-        newHistory.push({ ...from });
-      }
-      if (to.name && to.name !== 'Mon emplacement') {
-        newHistory.push({ ...to });
-      }
-      while (newHistory.length > 5) newHistory.pop();
-
       return {
         ...state,
-        history: newHistory,
         parameters: {
           ...state.parameters,
           ...action.payload,

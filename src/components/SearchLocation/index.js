@@ -46,8 +46,9 @@ class SearchLocation extends Component {
     let history = [];
     try {
       history = JSON.parse(await AsyncStorage.getItem('search-history'));
-      uniqBy(history, 'name');
+      history = uniqBy(history, 'name');
       remove(history, i => isEmpty(i) || !i.name || !i.lat || !i.lng);
+      console.log('history', history);
     } catch (e) {}
     this.setState({ history: history || [] });
   }
@@ -115,10 +116,10 @@ class SearchLocation extends Component {
     }
 
     const oldHistory = get(this.state, 'history', []);
-    const newHistory = [...oldHistory];
+    let newHistory = [...oldHistory];
 
     newHistory.push({ lat, lng, name: text });
-    uniqBy(newHistory, 'name');
+    newHistory = uniqBy(newHistory, 'name');
     remove(newHistory, i => isEmpty(i) || !i.name || !i.lat || !i.lng);
     while (newHistory.length > 2) newHistory.shift();
     await AsyncStorage.setItem('search-history', JSON.stringify(newHistory));

@@ -2,11 +2,12 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { Spring } from 'react-spring';
 
-import { MapView, LinearGradient } from 'expo';
+import { MapView } from 'expo';
+
 import RouteSearchForm from '@/components/RouteSearchForm';
 
 import { getSearchParameters, getResults, getIsLoading } from '@/domains/search/selectors';
@@ -45,17 +46,15 @@ class HomeScreen extends React.Component {
             reverse={flip}
             onRest={this.flip}
             config={{
-              duration: 250,
+              duration: 1000,
               precision: 0.001,
             }}
-            from={{ color1: '#F53844', color2: '#42378F' }}
-            to={{ color2: '#F53844', color1: '#42378F' }}>
+            from={{ ml: '-25%' }}
+            to={{ ml: '115%' }}>
             {props => (
-              <LinearGradient
-                colors={[props.color1, props.color2]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
+              <View
                 style={{
+                  backgroundColor: '#FFF',
                   position: 'absolute',
                   top: 0,
                   bottom: 0,
@@ -63,8 +62,29 @@ class HomeScreen extends React.Component {
                   right: 0,
                   zIndex: 9999,
                   opacity: 0.9,
-                }}
-              />
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={require('../../assets/images/tram-side.png')}
+                  style={{ height: 64, width: 64, marginLeft: props.ml }}
+                />
+                <Image
+                  source={require('../../assets/images/tram-side.png')}
+                  style={{ height: 64, width: 64, marginLeft: props.ml }}
+                />
+                <Image
+                  source={require('../../assets/images/tram-side.png')}
+                  style={{ height: 64, width: 64, marginLeft: props.ml }}
+                />
+                <Image
+                  source={require('../../assets/images/tram-side.png')}
+                  style={{ height: 64, width: 64, marginLeft: props.ml }}
+                />
+              </View>
             )}
           </Spring>
         )}

@@ -8,10 +8,11 @@ import LegStyle from '../../../StyleSheets/Leg';
 
 import LegDuration from './components/Duration';
 import LegIllustration from './components/Illustration';
+import StopDetails from './components/StopDetails';
 
 export default class TramLeg extends React.Component {
   render() {
-    const { leg, index } = this.props;
+    const { leg, index, stopDetails } = this.props;
 
     return (
       <View style={LegStyle.container}>
@@ -30,11 +31,7 @@ export default class TramLeg extends React.Component {
             </View>
           </View>
           <View style={LegStyle.descriptionItem}>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <Text>
-                {leg.legGeometry.length} arrêt{leg.legGeometry.length > 1 ? 's' : ''}{' '}
-              </Text>
-            </View>
+            <StopDetails stopDetails={stopDetails} />
             <LegDuration duration={leg.duration} />
           </View>
           <View style={LegStyle.destination}>

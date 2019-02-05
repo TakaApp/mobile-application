@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 import Hour from '@/components/Hour';
 import Place from '@/components/Place';
@@ -7,10 +7,11 @@ import LegStyle from '@/StyleSheets/Leg';
 
 import LegDuration from './components/Duration';
 import LegIllustration from './components/Illustration';
+import StopDetails from './components/StopDetails';
 
-export default class BugLeg extends React.Component {
+class BusLeg extends React.Component {
   render() {
-    const { leg, index } = this.props;
+    const { leg, index, stopDetails } = this.props;
 
     return (
       <View style={LegStyle.container}>
@@ -29,11 +30,7 @@ export default class BugLeg extends React.Component {
             </View>
           </View>
           <View style={LegStyle.descriptionItem}>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-              <Text>
-                {leg.legGeometry.length} arrêt{leg.legGeometry.length > 1 ? 's' : ''}{' '}
-              </Text>
-            </View>
+            <StopDetails stopDetails={stopDetails} />
             <LegDuration duration={leg.duration} />
           </View>
           <View style={LegStyle.destination}>
@@ -52,3 +49,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
+
+BusLeg.defaultProps = {
+  stopDetails: [],
+};
+
+export default BusLeg;

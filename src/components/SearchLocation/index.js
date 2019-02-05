@@ -49,7 +49,7 @@ class SearchLocation extends Component {
       uniqBy(history, 'name');
       remove(history, i => isEmpty(i) || !i.name || !i.lat || !i.lng);
     } catch (e) {}
-    this.setState({ history });
+    this.setState({ history: history || [] });
   }
 
   getLocationAsync = async () => {
@@ -118,6 +118,8 @@ class SearchLocation extends Component {
     const newHistory = [...oldHistory];
 
     newHistory.push({ lat, lng, name: text });
+    uniqBy(newHistory, 'name');
+    remove(newHistory, i => isEmpty(i) || !i.name || !i.lat || !i.lng);
     while (newHistory.length > 2) newHistory.shift();
     await AsyncStorage.setItem('search-history', JSON.stringify(newHistory));
 

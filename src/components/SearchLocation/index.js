@@ -19,6 +19,7 @@ import get from 'lodash/get';
 import uniqBy from 'lodash/uniqBy';
 import remove from 'lodash/remove';
 import isEmpty from 'lodash/isEmpty';
+import debounce from 'lodash/debounce';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -48,7 +49,6 @@ class SearchLocation extends Component {
       history = JSON.parse(await AsyncStorage.getItem('search-history'));
       history = uniqBy(history, 'name');
       remove(history, i => isEmpty(i) || !i.name || !i.lat || !i.lng);
-      console.log('history', history);
     } catch (e) {}
     this.setState({ history: history || [] });
   }
@@ -93,20 +93,27 @@ class SearchLocation extends Component {
     });
   };
 
-  // called every time the user changes the input
-  onChangeText = async inputText => {
-    this.setState({ loading: true });
-    this.props.onInputChange(inputText);
-
-    // fetch the data from the API and update our state with it
+  fetchData = async () => {
     try {
-      const response = await fetch(`https://api.nantes.cool/search-location/${inputText}`);
+      const response = await fetch(
+        `https://api.nantes.cool/search-location/${this.props.inputText}`
+      );
       const data = await response.json();
       this.setState({ data: data || [], hasSearched: true, loading: false });
     } catch (e) {
       this.props.putError(`On a quelques problèmes pour se connecter au serveur... (ง'̀-'́)ง`);
       this.setState({ loading: false });
     }
+  };
+  debouncedFetchData = debounce(this.fetchData, 250);
+
+  // called every time the user changes the input
+  onChangeText = async inputText => {
+    this.setState({ loading: true });
+    this.props.onInputChange(inputText);
+
+    // fetch the data from the API and update our state with it
+    this.debouncedFetchData();
   };
 
   // called when the user selects an option

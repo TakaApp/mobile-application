@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 
 import polyUtil from 'polyline-encoded';
 
+/* utils */
+import get from 'lodash/get';
+
 import { Marker, Polyline } from 'react-native-maps';
 import { Constants, MapView } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,7 +68,32 @@ class ItineraryScreen extends React.Component {
   }
 
   async componentDidMount() {
+    const { itinerary } = this.props;
+
     this._sub = this.props.navigation.addListener('didFocus', () => page('itinerary'));
+
+    for (const leg of itinerary.legs) {
+      const routeID = get(leg, 'routeID');
+      const fromStopID = get(leg, 'from.stopID', null);
+      const toStopID = get(leg, 'to.stopID', null);
+
+      if (!routeID || !fromStopID || !toStopID) {
+        continue;
+      }
+      const response = await fetch(
+        `http://192.168.1.76:1323/stop-details/${routeID}/${fromStopID}/${toStopID}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const data = await response.json();
+
+      console.log('data', data);
+    }
   }
   componentWillUnmount() {
     this._sub.remove();

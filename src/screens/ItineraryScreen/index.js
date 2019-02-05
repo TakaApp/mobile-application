@@ -63,6 +63,8 @@ class ItineraryScreen extends React.Component {
     header: null,
   };
 
+  state = {};
+
   componentDidUpdate() {
     this.map.fitToElements();
   }
@@ -81,7 +83,7 @@ class ItineraryScreen extends React.Component {
         continue;
       }
       const response = await fetch(
-        `http://192.168.1.76:1323/stop-details/${routeID}/${fromStopID}/${toStopID}`,
+        `http://192.168.1.18:1323/stop-details/${routeID}/${fromStopID}/${toStopID}`,
         {
           method: 'GET',
           headers: {
@@ -92,7 +94,9 @@ class ItineraryScreen extends React.Component {
       );
       const data = await response.json();
 
-      console.log('data', data);
+      this.setState({
+        [`${routeID}${fromStopID}${toStopID}`]: data,
+      });
     }
   }
   componentWillUnmount() {
@@ -168,7 +172,15 @@ class ItineraryScreen extends React.Component {
             </View>
             <Header itinerary={itinerary} />
           </View>
-          <View style={styles.legs}>{itinerary.legs.map(LegFactory.build)}</View>
+          <View style={styles.legs}>
+            {itinerary.legs.map((leg, index) => {
+              const routeID = get(leg, 'routeID');
+              const fromStopID = get(leg, 'from.stopID', null);
+              const toStopID = get(leg, 'to.stopID', null);
+
+              return LegFactory.build(leg, index, this.state[`${routeID}${fromStopID}${toStopID}`]);
+            })}
+          </View>
         </ScrollView>
       </View>
     );

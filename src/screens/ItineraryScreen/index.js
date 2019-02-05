@@ -83,7 +83,7 @@ class ItineraryScreen extends React.Component {
         continue;
       }
       const response = await fetch(
-        `http://192.168.1.18:1323/stop-details/${routeID}/${fromStopID}/${toStopID}`,
+        `http://api.nantes.cool/stop-details/${routeID}/${fromStopID}/${toStopID}`,
         {
           method: 'GET',
           headers: {

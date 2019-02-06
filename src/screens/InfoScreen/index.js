@@ -36,7 +36,7 @@ class InfoScreen extends React.Component {
               <Text>- Application Android</Text>
               <Text>- Page avec les perturbations TAN en temps réel</Text>
               <Text>- Page avec la liste des arrêts et horaires de ceux-ci</Text>
-              <Text>- Horaires des bus/tram en temps en temps réel et non en prévisionnel</Text>
+              <Text>- Horaires des bus/tram en temps réel et non en prévisionnel</Text>
             </View>
             <View style={styles.roadmap}>
               <Text style={{ textAlign: 'center', fontWeight: '800', marginBottom: 8 }}>FAQ</Text>

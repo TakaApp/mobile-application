@@ -59,8 +59,9 @@ class RouteSearchForm extends Component {
 
   toggleDateOptions = () => this.setState({ dateOptionsOpened: !this.state.dateOptionsOpened });
 
-  searchForNewLocation = location => () => {
+  searchForNewLocation = location => (disableMyPosition = false) => {
     NavigationService.navigate('SearchLocation', {
+      disableMyPosition,
       callback: place => {
         this.props.updateSearchParameters({ [location]: place, changeScreen: this.props.simple });
         this.props.updateFormValue({
@@ -157,7 +158,7 @@ class RouteSearchForm extends Component {
               <TouchableOpacity
                 onPress={() => {
                   event('location', 'change', 'to');
-                  this.searchForNewLocation('to')();
+                  this.searchForNewLocation('to')(simple);
                 }}>
                 <View style={styles.input}>
                   <Text>{toText || "Où est-ce qu'on va ?"}</Text>

@@ -24,10 +24,12 @@ export default class SearchLocationScreen extends React.Component {
     const { searchText } = this.state;
     const { navigation } = this.props;
     const callback = navigation.getParam('callback', () => true);
+    const disableMyPosition = navigation.getParam('disableMyPosition', false);
 
     return (
       <View style={{ padding: 16 }}>
         <SearchLocation
+          disableMyPosition={disableMyPosition}
           placeholder="Rechercher"
           onSelect={async place => {
             navigation.goBack();

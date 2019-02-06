@@ -34,7 +34,6 @@ class InfoScreen extends React.Component {
                 Roadmap
               </Text>
               <Text>- Application Android</Text>
-              <Text>- Pouvoir déplier la liste des arrêts</Text>
               <Text>- Page avec les perturbations TAN en temps réel</Text>
               <Text>- Page avec la liste des arrêts et horaires de ceux-ci</Text>
               <Text>- Horaires des bus/tram en temps en temps réel et non en prévisionnel</Text>

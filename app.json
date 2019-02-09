@@ -20,7 +20,13 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.akselsme.taka"
+      "bundleIdentifier": "com.akselsme.taka",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription":
+          "Taka a besoin de votre localisation pour vous proposer des trajets depuis votre emplacement",
+        "NSLocationAlwaysUsageDescription":
+          "Taka a besoin de votre localisation pour vous proposer des trajets depuis votre emplacement"
+      }
     }
   }
 }

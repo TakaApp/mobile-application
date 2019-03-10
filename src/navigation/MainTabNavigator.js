@@ -22,12 +22,7 @@ const HomeStack = createStackNavigator({
 
 HomeStack.navigationOptions = {
   tabBarLabel: '',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-search' : 'md-information-circle'}
-    />
-  ),
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'ios-search'} />,
 };
 
 const InfoStack = createStackNavigator({
@@ -37,10 +32,7 @@ const InfoStack = createStackNavigator({
 InfoStack.navigationOptions = {
   // tabBarLabel: 'Infos',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-options'}
-    />
+    <TabBarIcon focused={focused} name={'ios-information-circle-outline'} />
   ),
 };
 
@@ -50,9 +42,7 @@ const PreferencesStack = createStackNavigator({
 });
 
 PreferencesStack.navigationOptions = {
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name={'ios-options'} />,
 };
 
 export default createBottomTabNavigator(

@@ -75,7 +75,7 @@ class ItineraryScreen extends React.Component {
     this._sub = this.props.navigation.addListener('didFocus', () => page('itinerary'));
 
     for (const leg of itinerary.legs) {
-      const routeID = get(leg, 'routeID');
+      const routeID = get(leg, 'routeID', null);
       const fromStopID = get(leg, 'from.stopID', null);
       const toStopID = get(leg, 'to.stopID', null);
 
@@ -174,7 +174,7 @@ class ItineraryScreen extends React.Component {
           </View>
           <View style={styles.legs}>
             {itinerary.legs.map((leg, index) => {
-              const routeID = get(leg, 'routeID');
+              const routeID = get(leg, 'routeID', null);
               const fromStopID = get(leg, 'from.stopID', null);
               const toStopID = get(leg, 'to.stopID', null);
 

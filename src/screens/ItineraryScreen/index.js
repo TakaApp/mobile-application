@@ -65,10 +65,6 @@ class ItineraryScreen extends React.Component {
 
   state = {};
 
-  componentDidUpdate() {
-    this.map.fitToElements();
-  }
-
   async componentDidMount() {
     const { itinerary } = this.props;
 
@@ -101,6 +97,10 @@ class ItineraryScreen extends React.Component {
   }
   componentWillUnmount() {
     this._sub.remove();
+  }
+
+  componentDidUpdate() {
+    this.map.fitToElements(true);
   }
 
   render() {

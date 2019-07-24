@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Platform,
   AsyncStorage,
+  Image,
 } from 'react-native';
 import { Location, Haptic } from 'expo';
 import Sentry from 'sentry-expo';
@@ -147,6 +148,16 @@ class SearchLocation extends Component {
     return (
       <View>
         {/* user input */}
+        <TouchableOpacity style={styles.item}>
+          <Text>
+            Résultats améliorés par
+            <Image
+              source={require('../../assets/images/algolia.png')}
+              style={{ maxHeight: 20, maxWidth: 100 }}
+              resizeMode="contain"
+            />
+          </Text>
+        </TouchableOpacity>
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <TextInput
             style={styles.input}
@@ -182,7 +193,7 @@ class SearchLocation extends Component {
               renderItem={() => <Text style={styles.item}>Aucun résultat (╯°□°）╯︵ ┻━┻</Text>}
             />
           )}
-          {history.length > 0 && (
+          {!hasSearched && history.length > 0 && (
             <FlatList
               keyboardShouldPersistTaps="always"
               keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
@@ -205,25 +216,27 @@ class SearchLocation extends Component {
             />
           )}
           {data.length > 0 && (
-            <FlatList
-              keyboardShouldPersistTaps="always"
-              keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
-              data={data}
-              style={{ backgroundColor: '#FFF' }}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={() =>
-                    this.select({
-                      lat: item.lat,
-                      lng: item.lng,
-                      text: item.name,
-                    })
-                  }>
-                  <Text>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            <>
+              <FlatList
+                keyboardShouldPersistTaps="always"
+                keyExtractor={item => `${item.name}${item.lat}${item.lng}`}
+                data={data}
+                style={{ backgroundColor: '#FFF' }}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.item}
+                    onPress={() =>
+                      this.select({
+                        lat: item.lat,
+                        lng: item.lng,
+                        text: item.name,
+                      })
+                    }>
+                    <Text>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </>
           )}
         </View>
       </View>
